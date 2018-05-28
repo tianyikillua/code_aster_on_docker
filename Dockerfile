@@ -33,4 +33,4 @@ RUN tar xvf Salome-Meca-2017.0.2-LGPL-2.tgz
 RUN ./Salome-Meca-2017.0.2-LGPL-2.run
 
 RUN rm Salome-Meca-2017.0.2-LGPL-2.*
-RUN echo "source salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bash_profile
+RUN echo "" >> .bashrc && echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
