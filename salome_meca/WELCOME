@@ -1,0 +1,14 @@
+# Salome_Meca latest version
+
+Welcome to Salome_Meca!
+
+This image provides the official build of the latest
+release of Salome_Meca.
+
+To excute an "export" file, just run
+
+    as_run foo.export
+
+To run all testcases, the following script can be used
+
+    bash run_tests.sh

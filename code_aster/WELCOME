@@ -1,0 +1,28 @@
+# Code_Aster latest stable version
+
+Welcome to Code_Aster!
+
+This image provides a GCC-based build of the latest
+stable release of Code_Aster containing the following
+components:
+
+- hdf5 1.8.14
+- med 3.2.1
+- gmsh 2.12.0
+- grace 5.1.23
+- gibi 2000
+- scotch 6.0.4
+- astk 1.13.10
+- metis 5.1.0
+- mfront 3.0.0
+- mumps 5.1.1
+- homard 11.7
+- aster 13.4.0
+
+To excute an "export" file, just run
+
+    as_run foo.export
+
+To run all testcases, the following script can be used
+
+    bash run_tests.sh

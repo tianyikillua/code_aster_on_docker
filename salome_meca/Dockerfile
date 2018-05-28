@@ -27,10 +27,18 @@ RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER aster
 WORKDIR /home/aster
 
+# Download and install the latest salome_meca
 RUN wget --no-check-certificate --quiet \
     https://www.code-aster.org/FICHIERS/Salome-Meca-2017.0.2-LGPL-2.tgz
 RUN tar xf Salome-Meca-2017.0.2-LGPL-2.tgz
 RUN ./Salome-Meca-2017.0.2-LGPL-2.run
 
+# Cleanup and add as_run into PATH
 RUN rm Salome-Meca-2017.0.2-LGPL-2.*
-RUN echo "" >> .bashrc && echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
+RUN echo "" >> .bashrc
+RUN echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
+RUN echo "cat ~/WELCOME" >> .bashrc
+
+# Add something (useful or not)
+COPY WELCOME ~/WELCOME
+COPY run_tests.sh ~/run_tests.sh
