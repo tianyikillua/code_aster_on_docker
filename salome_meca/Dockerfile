@@ -40,5 +40,5 @@ RUN echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
 
 # Add something (useful or not)
-COPY WELCOME ~/WELCOME
-COPY run_tests.sh ~/run_tests.sh
+COPY salome_meca/WELCOME /home/aster/WELCOME
+COPY run_tests.sh /home/aster/run_tests.sh

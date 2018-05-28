@@ -53,8 +53,8 @@ RUN echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
 
 # Add something (useful or not)
-COPY WELCOME ~/WELCOME
-COPY run_tests.sh ~/run_tests.sh
+COPY code_aster/WELCOME /home/aster/WELCOME
+COPY run_tests.sh /home/aster/run_tests.sh
 
 # Download the newest MEDfile library
 # RUN wget --no-check-certificate --quiet ${MED_SRC} -O med.tar.gz
