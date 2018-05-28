@@ -27,9 +27,9 @@ RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER aster
 WORKDIR /home/aster
 
-RUN wget --no-check-certificate \
+RUN wget --no-check-certificate --quiet \
     https://www.code-aster.org/FICHIERS/Salome-Meca-2017.0.2-LGPL-2.tgz
-RUN tar xvf Salome-Meca-2017.0.2-LGPL-2.tgz
+RUN tar xf Salome-Meca-2017.0.2-LGPL-2.tgz
 RUN ./Salome-Meca-2017.0.2-LGPL-2.run
 
 RUN rm Salome-Meca-2017.0.2-LGPL-2.*
