@@ -4,10 +4,7 @@ FROM phusion/baseimage:0.9.22
 USER root
 RUN apt-get update && \
     apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold" && \
-    apt-get -y install locales sudo && \
-    echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apt-get install -y locales sudo
 
 # Get basic packages
 RUN apt-get install -y \
@@ -19,6 +16,10 @@ RUN apt-get install -y \
     python-qt4 \
     libxft2 \
     libxss1
+
+RUN echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set locale environment
 ENV LC_ALL=C.UTF-8 \
