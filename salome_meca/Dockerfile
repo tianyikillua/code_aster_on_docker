@@ -4,7 +4,7 @@ LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 # Get Ubuntu updates
 USER root
 RUN apt-get update && \
-    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold"
+    apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold"
 
 # Download and install the latest salome_meca
 USER aster

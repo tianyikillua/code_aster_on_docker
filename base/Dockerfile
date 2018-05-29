@@ -3,7 +3,7 @@ FROM phusion/baseimage:0.9.22
 # Get Ubuntu updates
 USER root
 RUN apt-get update && \
-    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold" && \
+    apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold" && \
     apt-get -y install locales sudo && \
     echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \

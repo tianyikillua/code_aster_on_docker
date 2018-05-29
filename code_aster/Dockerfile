@@ -10,7 +10,7 @@ ENV MUMPS_SRC="https://bitbucket.org/code_aster/mumps/get/5.1.2_aster4.tar.gz"
 # Get Ubuntu updates and basic packages
 USER root
 RUN apt-get update && \
-    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold"
+    apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold"
 RUN apt-get install -y \
     make cmake \
     zlib1g-dev \
