@@ -18,6 +18,7 @@ RUN apt-get install -y \
     libopenblas-dev \
     libboost-python-dev \
     vim
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Download and install the latest stable version
 USER aster
@@ -35,9 +36,8 @@ RUN echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
 RUN echo "echo" >> .bashrc
 
-# Add something (useful or not)
-COPY code_aster/WELCOME /home/aster/WELCOME
-COPY run_tests.sh /home/aster/run_tests.sh
+# Add a welcome message
+COPY WELCOME /home/aster/WELCOME
 
 USER root
 

@@ -5,6 +5,7 @@ LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 USER root
 RUN apt-get update && \
     apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold"
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Download and install the latest salome_meca
 USER aster
@@ -21,8 +22,7 @@ RUN echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
 RUN echo "echo" >> .bashrc
 
-# Add something (useful or not)
-COPY salome_meca/WELCOME /home/aster/WELCOME
-COPY run_tests.sh /home/aster/run_tests.sh
+# Add a welcome message
+COPY WELCOME /home/aster/WELCOME
 
 USER root

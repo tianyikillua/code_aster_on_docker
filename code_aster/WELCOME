@@ -19,10 +19,6 @@ components:
 - homard 11.7
 - aster 13.4.0
 
-To excute an "export" file, just run
+To execute an "export" file, just run
 
     as_run foo.export
-
-To run all testcases, the following script can be used
-
-    bash run_tests.sh
