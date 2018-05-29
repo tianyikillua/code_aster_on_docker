@@ -1,33 +1,14 @@
-FROM ubuntu:16.04
+FROM quay.io/tianyikillua/base:latest
 LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 
-# Get Ubuntu updates and packages
+# Get Ubuntu updates
 USER root
-RUN apt-get update
-RUN apt-get install -y \
-    sudo \
-    gcc g++ gfortran \
-    wget \
-    python \
-    python-dev \
-    python-numpy \
-    python-qt4 \
-    libxft2 \
-    libxss1
-
-# Set locale environment
-ENV LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8 \
-    LANGUAGE=C.UTF-8
-
-# Add a new user
-RUN adduser --disabled-password --gecos "" aster
-RUN adduser aster sudo
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER aster
-WORKDIR /home/aster
+RUN apt-get update && \
+    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold"
 
 # Download and install the latest salome_meca
+USER aster
+WORKDIR /home/aster
 RUN wget --no-check-certificate --quiet \
     https://www.code-aster.org/FICHIERS/Salome-Meca-2017.0.2-LGPL-2.tgz
 RUN tar xf Salome-Meca-2017.0.2-LGPL-2.tgz
@@ -38,7 +19,10 @@ RUN rm Salome-Meca-2017.0.2-LGPL-2.*
 RUN echo "" >> .bashrc
 RUN echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
+RUN echo "echo" >> .bashrc
 
 # Add something (useful or not)
 COPY salome_meca/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
+
+USER root

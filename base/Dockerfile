@@ -3,11 +3,22 @@ FROM phusion/baseimage:0.9.22
 # Get Ubuntu updates
 USER root
 RUN apt-get update && \
-    apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
+    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold" && \
     apt-get -y install locales sudo && \
     echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Get basic packages
+RUN apt-get install -y \
+    gcc g++ gfortran \
+    wget \
+    python \
+    python-dev \
+    python-numpy \
+    python-qt4 \
+    libxft2 \
+    libxss1
 
 # Set locale environment
 ENV LC_ALL=C.UTF-8 \

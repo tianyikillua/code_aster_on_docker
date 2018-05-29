@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM quay.io/tianyikillua/base:latest
 LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 
 # Variables
@@ -9,36 +9,18 @@ ENV MUMPS_SRC="https://bitbucket.org/code_aster/mumps/get/5.1.2_aster4.tar.gz"
 
 # Get Ubuntu updates and basic packages
 USER root
-RUN apt-get update
+RUN apt-get update && \
+    apt-get upgrade -y -o --with-new-pkgs Dpkg::Options::="--force-confold"
 RUN apt-get install -y \
-    sudo \
     make cmake \
-    gcc g++ gfortran \
-    vim \
     zlib1g-dev \
-    wget \
-    python \
-    python-dev \
-    python-numpy \
-    python-qt4 \
     tk bison flex \
     libopenblas-dev \
     libboost-python-dev \
-    libxft2 \
-    libxss1
+    vim
 
-# Set locale environment
-ENV LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8 \
-    LANGUAGE=C.UTF-8
-
-# Add a new user
-RUN adduser --disabled-password --gecos "" aster
-RUN adduser aster sudo
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Download and install the latest stable version
 USER aster
-
-# Download and install the latest production version
 WORKDIR /tmp
 RUN wget --no-check-certificate --quiet ${ASTER_SRC} -O aster.tar.gz
 RUN mkdir aster && tar xf aster.tar.gz -C aster --strip-components 1 && \
@@ -51,10 +33,13 @@ RUN rm -rf /tmp/*
 RUN echo "" >> .bashrc
 RUN echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
+RUN echo "echo" >> .bashrc
 
 # Add something (useful or not)
 COPY code_aster/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
+
+USER root
 
 # Download the newest MEDfile library
 # RUN wget --no-check-certificate --quiet ${MED_SRC} -O med.tar.gz
