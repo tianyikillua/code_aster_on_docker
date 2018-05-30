@@ -22,7 +22,8 @@ RUN echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc
 RUN echo "cat ~/WELCOME" >> .bashrc
 RUN echo "echo" >> .bashrc
 
-# Add a welcome message
-COPY WELCOME /home/aster/WELCOME
+# Add a welcome message and a script for testcases
+COPY salome_meca/WELCOME /home/aster/WELCOME
+COPY run_tests.sh /home/aster/run_tests.sh
 
 USER root
