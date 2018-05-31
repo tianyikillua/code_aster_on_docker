@@ -1,7 +1,7 @@
 ASRUN=/home/aster/aster/bin/as_run
-TEST_DIR=/home/aster/test
+TEST_DIR=/home/aster/shared/test
 
-mkdir $TEST_DIR
+mkdir -p $TEST_DIR
 cd $TEST_DIR
 $ASRUN --stdout=out --stderr=err --list --all --output=testcases > screen
 

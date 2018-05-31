@@ -33,10 +33,12 @@ RUN apt-get install -y \
     tk bison flex \
     libmpich-dev \
     libopenblas-dev \
-    libscalapack-mpi-dev \
+    # libscalapack-mpi-dev \
     libboost-python-dev \
-    vim
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    vim && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 USER aster
 WORKDIR /tmp
 
@@ -69,8 +71,9 @@ RUN mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
                 --CXXOPTFLAGS="-O2" \
                 --FOPTFLAGS="-O2" \
                 --with-debugging=0 --with-shared-libraries=1 \
-                --prefix=/home/aster/aster/public/petsc-${PETSC_VER} \
-                --download-hypre=yes --download-ml=yes --download-mumps=yes --download-scalapack=yes && \
+                --prefix=${PUBLIC}/petsc-${PETSC_VER} \
+                --download-blacs --download-scalapack \
+                --download-hypre --download-ml --download-mumps && \
     make all && \
     make install
 
@@ -80,11 +83,13 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
     export INCLUDES="${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
                      ${PUBLIC}/scotch-${SCOTCH_VER}/include \
-                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/include" && \
+                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
+                     ${PUBLIC}/petsc-${PETSC_VER}/include" && \
     export LIBPATH="${PUBLIC}/metis-${METIS_VER}/lib \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
-                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib" && \
+                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
+                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
@@ -101,7 +106,8 @@ RUN mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include_seq \
-                     ${PUBLIC}/mfront-${MFRONT_VER}/include" && \
+                     ${PUBLIC}/mfront-${MFRONT_VER}/include \
+                     ${PUBLIC}/petsc-${PETSC_VER}/include" && \
     export LIBPATH="${PUBLIC}/hdf5-${HDF5_VER}/lib \
                     ${PUBLIC}/med-${MED_VER}/lib \
                     ${PUBLIC}/metis-${METIS_VER}/lib \
@@ -109,23 +115,25 @@ RUN mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
-                    ${PUBLIC}/mfront-${MFRONT_VER}_mpi/lib" && \
+                    ${PUBLIC}/mfront-${MFRONT_VER}_mpi/lib \
+                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
     ./waf configure --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests && \
     ./waf build && \
     ./waf install
 
-# Cleanup and add as_run into PATH
-WORKDIR /home/aster
+# Cleanup
 # RUN rm -rf /tmp/*
-RUN echo "" >> .bashrc
-RUN echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc
-RUN echo "cat ~/WELCOME" >> .bashrc
-RUN echo "echo" >> .bashrc
 
 # Add a welcome message and a script for testcases
+WORKDIR /home/aster
 COPY code_aster/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
-RUN chmod +x /home/aster/run_tests.sh
+
+RUN echo "" >> .bashrc && \
+    echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
+    echo "cat ~/WELCOME" >> .bashrc && \
+    echo "echo" >> .bashrc && \
+    chmod +x /home/aster/run_tests.sh
 
 USER root
 

@@ -1,13 +1,11 @@
 FROM phusion/baseimage:0.9.22
 
-# Get Ubuntu updates
+# Get Ubuntu updates and basic packages
 USER root
 RUN apt-get update && \
     apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold" && \
-    apt-get install -y locales sudo
-
-# Get basic packages
-RUN apt-get install -y \
+    apt-get install -y \
+    locales sudo \
     gcc g++ gfortran \
     wget \
     python \
@@ -15,9 +13,8 @@ RUN apt-get install -y \
     python-numpy \
     python-qt4 \
     libxft2 \
-    libxss1
-
-RUN echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
+    libxss1 && \
+    echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -27,13 +24,10 @@ ENV LC_ALL=C.UTF-8 \
     LANGUAGE=C.UTF-8
 
 # Add a new user
-RUN adduser --disabled-password --gecos "" aster
-RUN adduser aster sudo
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Turn off forwarding of syslog messages to stdout
-# https://github.com/phusion/baseimage-docker/issues/186
-RUN touch /etc/service/syslog-forwarder/down
+RUN adduser --disabled-password --gecos "" aster && \
+    adduser aster sudo && \
+    echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    touch /etc/service/syslog-forwarder/down
 
 # Create a sharable zone
 USER aster
