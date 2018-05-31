@@ -12,11 +12,13 @@ ENV SCOTCH_VER=6.0.4
 ENV MUMPS_VER=5.1.1
 ENV MFRONT_VER=3.0.0
 ENV PETSC_VER=3.7.7
+ENV SCALAPACK_VER=2.0.2
 ENV ASTER_VER=13.4
 
 ENV SCOTCH_SRC="SRC/scotch-${SCOTCH_VER}-aster5.tar.gz"
 ENV MUMPS_SRC="SRC/mumps-${MUMPS_VER}-aster2.tar.gz"
 ENV ASTER_SRC="SRC/aster-${ASTER_VER}.0.tgz"
+ENV SCALAPACK_SRC="http://www.netlib.org/scalapack/scalapack-${SCALAPACK_VER}.tgz"
 ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
 ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
 
@@ -62,17 +64,33 @@ RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
     make install
 
 # Build parallel PETSc
-RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
-    mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
-    cd petsc && \
-    ./configure --COPTFLAGS="-O2" \
-                --CXXOPTFLAGS="-O2" \
-                --FOPTFLAGS="-O2" \
-                --with-debugging=0 --with-shared-libraries=1 \
-                --prefix=${PUBLIC}/petsc-${PETSC_VER} \
-                --download-scalapack --download-hypre --download-ml --download-mumps && \
-    make all && \
-    make install
+#
+# Currently disabled because the mumps used by PETSc maybe in conflict
+# with Code_Aster's mumps
+#
+# RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
+#     mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
+#     cd petsc && \
+#     ./configure --COPTFLAGS="-O2" \
+#                 --CXXOPTFLAGS="-O2" \
+#                 --FOPTFLAGS="-O2" \
+#                 --with-debugging=0 --with-shared-libraries=1 \
+#                 --prefix=${PUBLIC}/petsc-${PETSC_VER} \
+#                 --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
+#                 --download-hypre --download-ml --download-mumps && \
+#     make all && \
+#     make install
+
+# Build scalapack
+RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && \
+    mkdir scalapack && tar xf scalapack.tar.gz -C scalapack --strip-components 1 && \
+    cd scalapack && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX=${PUBLIC}/scalapack-${SCALAPACK_VER} .. && \
+    make && \
+    make install && \
+    cd ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib && \
+    cp libscalapack.a libblacs.a
 
 # Build parallel mumps
 RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
@@ -85,8 +103,7 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
-                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
-    cp ${PUBLIC}/petsc-${PETSC_VER}/lib/libscalapack.a ${PUBLIC}/petsc-${PETSC_VER}/lib/libblacs.a && \
+                    ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
@@ -102,9 +119,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                      ${PUBLIC}/scotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
-                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include_seq \
-                     ${PUBLIC}/mfront-${MFRONT_VER}/include \
-                     ${PUBLIC}/petsc-${PETSC_VER}/include" && \
+                     ${PUBLIC}/mfront-${MFRONT_VER}/include" && \
     export LIBPATH="${PUBLIC}/hdf5-${HDF5_VER}/lib \
                     ${PUBLIC}/med-${MED_VER}/lib \
                     ${PUBLIC}/metis-${METIS_VER}/lib \
@@ -112,8 +127,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
-                    ${PUBLIC}/mfront-${MFRONT_VER}_mpi/lib \
-                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
+                    ${PUBLIC}/mfront-${MFRONT_VER}/lib" && \
     export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
     export TFELHOME=${PUBLIC}/mfront-${MFRONT_VER} && \
     export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
@@ -129,7 +143,7 @@ COPY code_aster/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
-    echo "localhost cpu=$(cat /proc/cpuinfo | grep processor | wc -l)" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
+    echo "localhost:$(cat /proc/cpuinfo | grep processor | wc -l)" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
     rm -rf /tmp/* && \
     echo "" >> .bashrc && \
     echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
