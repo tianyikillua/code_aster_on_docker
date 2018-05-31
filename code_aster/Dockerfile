@@ -124,7 +124,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
 
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
-COPY code_aster/WELCOME /home/aster/WELCOME && \bit
+COPY code_aster/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
