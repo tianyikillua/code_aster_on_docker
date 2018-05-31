@@ -14,11 +14,11 @@ ENV MFRONT_VER=3.0.0
 ENV PETSC_VER=3.7.7
 ENV ASTER_VER=13.4
 
-ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
 ENV SCOTCH_SRC="SRC/scotch-${SCOTCH_VER}-aster5.tar.gz"
 ENV MUMPS_SRC="SRC/mumps-${MUMPS_VER}-aster2.tar.gz"
-ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
 ENV ASTER_SRC="SRC/aster-${ASTER_VER}.0.tgz"
+ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
+ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
 
 ENV ASTER_ROOT=/home/aster/aster
 ENV PUBLIC=$ASTER_ROOT/public
@@ -33,7 +33,6 @@ RUN apt-get update && \
     tk bison flex \
     libmpich-dev \
     libopenblas-dev \
-    libscalapack-mpi-dev \
     libboost-python-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -85,7 +84,9 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
     export LIBPATH="${PUBLIC}/metis-${METIS_VER}/lib \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
-                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib" && \
+                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
+                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
+    cp ${PUBLIC}/petsc-${PETSC_VER}/lib/libscalapack.a ${PUBLIC}/petsc-${PETSC_VER}/lib/libblacs.a && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
@@ -128,7 +129,7 @@ COPY code_aster/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
-    echo "$HOSTNAME cpu=$(cat /proc/cpuinfo | grep processor | wc -l)" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
+    echo "localhost cpu=$(cat /proc/cpuinfo | grep processor | wc -l)" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
     rm -rf /tmp/* && \
     echo "" >> .bashrc && \
     echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
