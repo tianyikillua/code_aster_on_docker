@@ -18,7 +18,7 @@ ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${
 ENV SCOTCH_SRC="SRC/scotch-${SCOTCH_VER}-aster5.tar.gz"
 ENV MUMPS_SRC="SRC/mumps-${MUMPS_VER}-aster2.tar.gz"
 ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
-ENV ASTER_SRC="SRC/aster-${ASTER_VER}.0.tar"
+ENV ASTER_SRC="SRC/aster-${ASTER_VER}.0.tgz"
 
 ENV ASTER_ROOT=/home/aster/aster
 ENV PUBLIC=$ASTER_ROOT/public
@@ -26,16 +26,15 @@ ENV PUBLIC=$ASTER_ROOT/public
 # Get Ubuntu updates and basic packages
 USER root
 RUN apt-get update && \
-    apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold"
-RUN apt-get install -y \
+    apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold" && \
+    apt-get install -y \
     make cmake \
     zlib1g-dev \
     tk bison flex \
     libmpich-dev \
     libopenblas-dev \
-    # libscalapack-mpi-dev \
-    libboost-python-dev \
-    vim && \
+    libscalapack-mpi-dev \
+    libboost-python-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -43,8 +42,8 @@ USER aster
 WORKDIR /tmp
 
 # Download and install the latest stable version
-RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz
-RUN mkdir aster_full && tar xf aster_full.tar.gz -C aster_full --strip-components 1 && \
+RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz && \
+    mkdir aster_full && tar xf aster_full.tar.gz -C aster_full --strip-components 1 && \
     cd aster_full && \
     python setup.py install --prefix ${ASTER_ROOT} --noprompt
 
@@ -56,24 +55,23 @@ RUN mkdir ptscotch && tar xf aster_full/${SCOTCH_SRC} -C ptscotch --strip-compon
     make install prefix=${PUBLIC}/ptscotch-${SCOTCH_VER}
 
 # Build parmetis
-RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz
-RUN mkdir parmetis && tar xf parmetis.tar.gz -C parmetis --strip-components 1 && \
+RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
+    mkdir parmetis && tar xf parmetis.tar.gz -C parmetis --strip-components 1 && \
     cd parmetis && \
     make config prefix=${PUBLIC}/parmetis-${PARMETIS_VER} && \
     make && \
     make install
 
 # Build parallel PETSc
-RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz
-RUN mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
+RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
+    mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
     cd petsc && \
     ./configure --COPTFLAGS="-O2" \
                 --CXXOPTFLAGS="-O2" \
                 --FOPTFLAGS="-O2" \
                 --with-debugging=0 --with-shared-libraries=1 \
                 --prefix=${PUBLIC}/petsc-${PETSC_VER} \
-                --download-blacs --download-scalapack \
-                --download-hypre --download-ml --download-mumps && \
+                --download-scalapack --download-hypre --download-ml --download-mumps && \
     make all && \
     make install
 
@@ -83,20 +81,18 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
     export INCLUDES="${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
                      ${PUBLIC}/scotch-${SCOTCH_VER}/include \
-                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
-                     ${PUBLIC}/petsc-${PETSC_VER}/include" && \
+                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/include" && \
     export LIBPATH="${PUBLIC}/metis-${METIS_VER}/lib \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
-                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
-                    ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
+                    ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib" && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
 
 # Build parallel aster
-RUN bash -c "source ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh"
-RUN mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
+RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
+    mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
     export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
                      ${PUBLIC}/med-${MED_VER}/include \
@@ -117,23 +113,27 @@ RUN mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
                     ${PUBLIC}/mfront-${MFRONT_VER}_mpi/lib \
                     ${PUBLIC}/petsc-${PETSC_VER}/lib" && \
-    ./waf configure --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests && \
+    export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
+    export TFELHOME=${PUBLIC}/mfront-${MFRONT_VER} && \
+    export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
+    export GIBI_DIR=${PUBLIC}/gibi-2000 && \
+    export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
+    ./waf configure --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install
 
-# Cleanup
-# RUN rm -rf /tmp/*
-
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
-COPY code_aster/WELCOME /home/aster/WELCOME
+COPY code_aster/WELCOME /home/aster/WELCOME && \bit
 COPY run_tests.sh /home/aster/run_tests.sh
 
-RUN echo "" >> .bashrc && \
+RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
+    echo "$HOSTNAME cpu=$(cat /proc/cpuinfo | grep processor | wc -l)" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
+    rm -rf /tmp/* && \
+    echo "" >> .bashrc && \
     echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
     echo "cat ~/WELCOME" >> .bashrc && \
-    echo "echo" >> .bashrc && \
-    chmod +x /home/aster/run_tests.sh
+    echo "echo" >> .bashrc
 
 USER root
 
