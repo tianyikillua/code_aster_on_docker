@@ -7,14 +7,14 @@ Currently two images are available:
 1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Currently only the PETSc package is not used, due to a possible conflict between the `mumps` that it uses and the `mumps` directly used by `aster`. Its size is around 4.3 GB.
 
 ```
-                           Version de Python : 2.7.12                           
-                           Version de NumPy : 1.11.0                                            
-                     Version de la librairie HDF5 : 1.8.14                      
-                      Version de la librairie MED : 3.2.1                       
-                     Version de la librairie MFront : 3.0.0                     
-                     Version de la librairie MUMPS : 5.1.1                      
-                        Librairie PETSc : non disponible                        
-                     Version de la librairie SCOTCH : 6.0.4  
+                           Version de Python : 2.7.12
+                           Version de NumPy : 1.11.0
+                     Version de la librairie HDF5 : 1.8.14
+                      Version de la librairie MED : 3.2.1
+                     Version de la librairie MFront : 3.0.0
+                     Version de la librairie MUMPS : 5.1.1
+                        Librairie PETSc : non disponible
+                     Version de la librairie SCOTCH : 6.0.4
 ```
 
 2. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2017.0.2). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 8 GB.
