@@ -126,6 +126,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
                     ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
+                    ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
                     ${PUBLIC}/mfront-${MFRONT_VER}/lib" && \
     export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
