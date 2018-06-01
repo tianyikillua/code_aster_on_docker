@@ -21,11 +21,11 @@ Currently two images are available:
 
 ### Introduction
 
-To install Docker for your platform, follow the instructions at [docker.com](https://www.docker.com/get-docker). The [tutorial](https://docs.docker.com/get-started) provided there may also be useful.
+To install Docker for your platform, follow the instructions at [docker.com](https://www.docker.com/get-docker). The [tutorial](https://docs.docker.com/get-started) provided there may also be useful.
 
 One you have Docker installed, you can use the following commands to run the here provided Code_Aster image.
 
-1. To run an interactive `bash` terminal containing the `as_run` command in its `PATH`:
+1. To run an interactive `bash` terminal containing the `as_run` command in its `PATH`
 
 ```sh
 docker run -ti --rm quay.io/tianyikillua/code_aster
@@ -33,7 +33,7 @@ docker run -ti --rm quay.io/tianyikillua/code_aster
 
 where `-ti` stands for an interactive process and `--rm` means the container will be automatically removed when it exits, in order to save disk space.
 
-2. If you also want to share your current working directory into the container (for instance, use `as_run` to launch a `.comm` simulation file along with all the other data files, prepared in the current directory):
+2. If you also want to share your current working directory into the container (for instance, use `as_run` to launch a `.comm` simulation file along with all the other data files, prepared in the current directory)
 
 ```sh
 docker run -ti --rm -v $(pwd):/home/aster/shared quay.io/tianyikillua/code_aster
@@ -89,7 +89,7 @@ A simple `run_tests.sh` script file is available at `/home/aster` that will laun
 
 The test results are saved to `/home/aster/shared/test` (which will be shared with your host if you are using the `-v` command). A summary will also be given at the end.
 
-Using the sequential version provided here, only **183/3587** tests failed mainly due to lack of some features not provided by the aster-full package.
+Using the sequential version provided here, only **183/3587** tests failed mainly due to lack of some features not provided by the `aster-full` package.
 
 - Missing `xmgrace` (20 cases)
 
@@ -165,6 +165,12 @@ erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  s
 ```
 
 ### Performance
+
+On a Windows 10 host with 4 Intel(R) Xeon(R) W-2123 CPU @ 3.6 GHz, with the [Docker Community Edition for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), the following strong scaling result is obtained for the [perf0009d](https://www.code-aster.org/V2/spip.php?article260) testcase.
+
+![](https://user-images.githubusercontent.com/4027283/40848354-3905383e-65bf-11e8-9f5b-3802a155a969.png)
+
+Since back-end virtualization may still be used by Docker under Mac and Windows, performance should be better under a native Linux environment using Docker.
 
 ### Author
 
