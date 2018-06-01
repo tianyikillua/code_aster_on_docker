@@ -81,12 +81,91 @@ for the parallel version.
 
 ### Testcases qualification
 
-A simple `run_tests.sh` script file is available at `/home/aster` that will run all the testcases. You can just run
+A simple `run_tests.sh` script file is available at `/home/aster` that will launch all the testcases available. You can just run
 
 ```
 ./run_tests.sh
 ```
 
-All the test results are saved to `/home/aster/shared/test` (which will be shared to your host if you are using the `-v` command when launching Docker). A summary will also be given at the end.
+The test results are saved to `/home/aster/shared/test` (which will be shared with your host if you are using the `-v` command). A summary will also be given at the end.
+
+Using the sequential version provided here, only **183/3587** tests failed mainly due to lack of some features not provided by the aster-full package.
+
+- Missing `xmgrace` (20 cases)
+
+```
+forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b  ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a  ssnv219b  ssnv219c  ssnv219d  tplp107b
+```
+
+- Missing `europlexus` (27 cases)
+
+```
+plexu*
+```
+
+- `gmsh` installation problem (3 cases, see [#1](../../issues/1))
+
+```
+ssls131a  zzzz151a  zzzz216b
+```
+
+- Missing `petsc` (7 cases)
+
+```
+petsc03a  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
+```
+
+- Missing `miss3d` (25 cases)
+
+```
+fdlv112b  fdlv112e  fdlv112f  fdlv112g  fdlv112k  fdlv113a  sdls118a  sdls118d  sdlv133a  sdlx101a  sdlx101b  sdlx103a  sdlx104a  sdlx105a  sdlx106a  sdnx100a  sdnx100b  sdnx100c  sdnx100e  sdnx100f  sdnx100g  sdnx101a  sdnx101c  zzzz108c  zzzz200b
+```
+
+- Missing `ecrevisse` (18 cases)
+
+```
+zzzz218a  zzzz218b  zzzz218c  zzzz354a  zzzz354b  zzzz354c  zzzz354d  zzzz354e  zzzz354g  zzzz354h  zzzz355a  zzzz355b  zzzz355c  zzzz355d  zzzz355e  zzzz355f  zzzz355g  zzzz355h
+```
+
+- Missing `CALC_MAC3COEUR` (31 cases)
+
+```
+mac3c*
+```
+
+- Missing `MACR_RECAL ` (6 cases)
+
+```
+sdls121a  sdls121b  sdls121c  zzzz159b  zzzz159e  zzzz159f
+```
+
+- Missing material data (32 cases)
+
+```
+hsnv131a  ort001a  ssll501a  ssna117a  ssna117b  ssna117c  ssnl121b  ssnl121c  ssnl128a  ssnl128b  ssnl128c  ssnl128d  ssnl131a  ssnl131b  ssnl131c  ssnl131d  ssnp132a  ssnv101c  ssnv113a  ssnv190a  ssnv190b  ssnv212a  ssnv213a  ssnv214a  ssnv215a  ssnv216a  zzzz118a
+zzzz118b  zzzz118c  zzzz118d  zzzz120a  zzzz120b
+```
+
+- Missing `scipy` (1 case)
+
+```
+sdll151a
+```
+
+- Missing `devtools` (1 case)
+
+```
+supv002a
+```
+
+- Possible numerical or CPU issues (12 cases)
+
+```
+erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  supv003a  umat002a  wtnv135a  zzzz255b
+```
 
 ### Performance
+
+### Author
+
+[Tianyi Li](https://www.linkedin.com/in/tianyikillua) ([tianyikillua@gmail.com](mailto:tianyikillua@gmail.com)) @ [Promold](https://www.linkedin.com/company/promold-paris)
