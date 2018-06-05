@@ -76,7 +76,7 @@ RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && 
     cp libscalapack.so libblacs.so
 
 # Build parallel mumps
-COPY code_aster/patch/patch_mumps /tmp
+COPY code_aster/patch/patch_mumps /tmp/patch_mumps
 RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
     patch -s -p0 < patch_mumps && \
     cd mumps && \
