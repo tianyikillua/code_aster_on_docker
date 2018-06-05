@@ -112,7 +112,7 @@ ssls131a  zzzz151a  zzzz216b
 - Missing `petsc` (7 cases)
 
 ```
-petsc03a  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
+petsc*  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
 ```
 
 - Missing `miss3d` (25 cases)
@@ -158,7 +158,7 @@ sdll151a
 supv002a
 ```
 
-- Possible numerical or CPU issues (12 cases)
+- Possible numerical or CPU issues to be investigated further (12 cases)
 
 ```
 erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  supv003a  umat002a  wtnv135a  zzzz255b

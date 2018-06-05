@@ -63,37 +63,21 @@ RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
     make && \
     make install
 
-# Build parallel PETSc
-#
-# Currently disabled because the mumps used by PETSc maybe in conflict
-# with Code_Aster's mumps
-#
-# RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
-#     mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
-#     cd petsc && \
-#     ./configure --COPTFLAGS="-O2" \
-#                 --CXXOPTFLAGS="-O2" \
-#                 --FOPTFLAGS="-O2" \
-#                 --with-debugging=0 --with-shared-libraries=1 \
-#                 --prefix=${PUBLIC}/petsc-${PETSC_VER} \
-#                 --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
-#                 --download-hypre --download-ml --download-mumps && \
-#     make all && \
-#     make install
-
 # Build scalapack
 RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && \
     mkdir scalapack && tar xf scalapack.tar.gz -C scalapack --strip-components 1 && \
     cd scalapack && \
     mkdir build && cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=${PUBLIC}/scalapack-${SCALAPACK_VER} .. && \
+    cmake -DCMAKE_INSTALL_PREFIX=${PUBLIC}/scalapack-${SCALAPACK_VER} -DBUILD_SHARED_LIBS=ON .. && \
     make && \
     make install && \
     cd ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib && \
     cp libscalapack.a libblacs.a
 
 # Build parallel mumps
+COPY code_aster/patch/patch_mumps /tmp
 RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
+    patch -s -p0 < patch_mumps && \
     cd mumps && \
     export INCLUDES="${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
@@ -108,6 +92,29 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
 
+# Build special mumps for PETSc (without OpenMP, metis and scotch)
+RUN mkdir mumps_petsc && tar xf aster_full/${MUMPS_SRC} -C mumps_petsc --strip-components 1 && \
+    cd mumps_petsc && \
+    export LIBPATH="${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
+    ./waf configure --prefix=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps --install-tests --enable-mpi --disable-openmp && \
+    ./waf build --jobs=1 && \
+    ./waf install --jobs=1
+
+# Build parallel PETSc
+RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
+    mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
+    cd petsc && \
+    ./configure --COPTFLAGS="-O2" \
+                --CXXOPTFLAGS="-O2" \
+                --FOPTFLAGS="-O2" \
+                --with-debugging=0 --with-shared-libraries=1 \
+                --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
+                --with-mumps-dir=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps \
+                --download-hypre --download-ml \
+                --prefix=${PUBLIC}/petsc-${PETSC_VER} && \
+    make all && \
+    make install
+
 # Build parallel aster
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
@@ -119,6 +126,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                      ${PUBLIC}/scotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
+                     ${PUBLIC}/petsc-${PETSC_VER}/include \
                      ${PUBLIC}/mfront-${MFRONT_VER}/include" && \
     export LIBPATH="${PUBLIC}/hdf5-${HDF5_VER}/lib \
                     ${PUBLIC}/med-${MED_VER}/lib \
@@ -128,6 +136,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
+                    ${PUBLIC}/petsc-${PETSC_VER}/lib \
                     ${PUBLIC}/mfront-${MFRONT_VER}/lib" && \
     export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
     export TFELHOME=${PUBLIC}/mfront-${MFRONT_VER} && \
