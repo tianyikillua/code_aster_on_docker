@@ -73,7 +73,7 @@ RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && 
     make && \
     make install && \
     cd ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib && \
-    cp libscalapack.a libblacs.a
+    cp libscalapack.so libblacs.so
 
 # Build parallel mumps
 COPY code_aster/patch/patch_mumps /tmp
