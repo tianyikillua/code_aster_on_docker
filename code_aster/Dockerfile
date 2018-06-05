@@ -30,6 +30,7 @@ USER root
 RUN apt-get update && \
     apt-get upgrade -y --with-new-pkgs -o Dpkg::Options::="--force-confold" && \
     apt-get install -y \
+    patch \
     make cmake \
     zlib1g-dev \
     tk bison flex \
