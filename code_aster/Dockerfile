@@ -144,6 +144,8 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
     export GIBI_DIR=${PUBLIC}/gibi-2000 && \
     export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
+    export LIB_METIS="parmetis" && \
+    export LIB_SCOTCH="ptscotch ptscotcherr ptscotcherrexit" && \
     ./waf configure --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install
