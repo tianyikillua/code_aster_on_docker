@@ -2,8 +2,6 @@ FROM quay.io/tianyikillua/base:latest
 LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 
 # Variables
-ENV ASTER_FULL_SRC="https://www.code-aster.org/FICHIERS/aster-full-src-13.4.0-3.noarch.tar.gz"
-
 ENV HDF5_VER=1.8.14
 ENV MED_VER=3.2.1
 ENV METIS_VER=5.1.0
@@ -22,6 +20,7 @@ ENV SCALAPACK_SRC="http://www.netlib.org/scalapack/scalapack-${SCALAPACK_VER}.tg
 ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
 ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
 
+ENV ASTER_FULL_SRC="https://www.code-aster.org/FICHIERS/aster-full-src-13.4.0-3.noarch.tar.gz"
 ENV ASTER_ROOT=/home/aster/aster
 ENV PUBLIC=$ASTER_ROOT/public
 
@@ -76,7 +75,7 @@ RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && 
     cp libscalapack.so libblacs.so
 
 # Build parallel mumps
-COPY code_aster/patch/patch_mumps /tmp/patch_mumps
+COPY code_aster/data/patch_mumps /tmp/patch_mumps
 RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
     patch -s -p0 < patch_mumps && \
     cd mumps && \
@@ -96,8 +95,9 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
 # Build special mumps for PETSc (without OpenMP, metis and scotch)
 RUN mkdir mumps_petsc && tar xf aster_full/${MUMPS_SRC} -C mumps_petsc --strip-components 1 && \
     cd mumps_petsc && \
+    export INCLUDES="" && \
     export LIBPATH="${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
-    ./waf configure --prefix=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps --install-tests --enable-mpi --disable-openmp && \
+    ./waf configure --prefix=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps --enable-mpi --disable-openmp && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
 
@@ -117,9 +117,11 @@ RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
     make install
 
 # Build parallel aster
+COPY code_aster/data/cfg.py /tmp/cfg.py
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
+    mv /tmp/cfg.py /tmp/aster/cfg.py && \
     export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
                      ${PUBLIC}/med-${MED_VER}/include \
                      ${PUBLIC}/metis-${METIS_VER}/include \
@@ -144,9 +146,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
     export GIBI_DIR=${PUBLIC}/gibi-2000 && \
     export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
-    export LINKFLAGS="-Wl,--allow-multiple-definition" && \
-    export LIB="parmetis ptscotch ptscotcherr ptscotcherrexit" && \
-    ./waf configure --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
+    ./waf configure --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install
 
