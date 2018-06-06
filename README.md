@@ -89,7 +89,7 @@ A simple `run_tests.sh` script file is available at `/home/aster` that will laun
 
 The test results are saved to `/home/aster/shared/test` (which will be shared with your host if you are using the `-v` command). A summary will also be given at the end.
 
-Using the sequential version provided here, only **183/3587** tests failed mainly due to lack of some features not provided by the `aster-full` package.
+Using the sequential and parallel versions provided here, only the following tests fail mainly due to lack of some features not provided by the `aster-full` package.
 
 - Missing `xmgrace` (20 cases)
 
@@ -97,10 +97,10 @@ Using the sequential version provided here, only **183/3587** tests failed mainl
 forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b  ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a  ssnv219b  ssnv219c  ssnv219d  tplp107b
 ```
 
-- Missing `europlexus` (27 cases)
+- Missing `europlexus` (28 cases)
 
 ```
-plexu*
+plexu* (except plexu10c)
 ```
 
 - `gmsh` installation problem (3 cases, see [#1](../../issues/1))
@@ -109,22 +109,16 @@ plexu*
 ssls131a  zzzz151a  zzzz216b
 ```
 
-- Missing `petsc` (7 cases)
+- Missing `miss3d` (29 cases)
 
 ```
-petsc*  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
+fdlv112b  fdlv112e  fdlv112f  fdlv112g  fdlv112k  fdlv113a  sdls118a  sdls118d  sdlv133a  sdlx101a  sdlx101b  sdlx103a  sdlx104a  sdlx105a  sdlx106a  sdnx100a  sdnx100b  sdnx100c  sdnx100d  sdnx100e  sdnx100f  sdnx100g  sdnx101a  sdnx101b  sdnx101c  zzzz108c  zzzz200b
 ```
 
-- Missing `miss3d` (25 cases)
+- Missing `ecrevisse` (19 cases)
 
 ```
-fdlv112b  fdlv112e  fdlv112f  fdlv112g  fdlv112k  fdlv113a  sdls118a  sdls118d  sdlv133a  sdlx101a  sdlx101b  sdlx103a  sdlx104a  sdlx105a  sdlx106a  sdnx100a  sdnx100b  sdnx100c  sdnx100e  sdnx100f  sdnx100g  sdnx101a  sdnx101c  zzzz108c  zzzz200b
-```
-
-- Missing `ecrevisse` (18 cases)
-
-```
-zzzz218a  zzzz218b  zzzz218c  zzzz354a  zzzz354b  zzzz354c  zzzz354d  zzzz354e  zzzz354g  zzzz354h  zzzz355a  zzzz355b  zzzz355c  zzzz355d  zzzz355e  zzzz355f  zzzz355g  zzzz355h
+zzzz218a  zzzz218b  zzzz218c  zzzz354a  zzzz354b  zzzz354c  zzzz354d  zzzz354e  zzzz354f  zzzz354g  zzzz354h  zzzz355a  zzzz355b  zzzz355c  zzzz355d  zzzz355e  zzzz355f  zzzz355g  zzzz355h
 ```
 
 - Missing `CALC_MAC3COEUR` (31 cases)
@@ -158,10 +152,10 @@ sdll151a
 supv002a
 ```
 
-- Possible numerical or CPU issues to be investigated further (12 cases)
+- Possible numerical issues to be investigated further (13 cases)
 
 ```
-erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  supv003a  umat002a  wtnv135a  zzzz255b
+erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  supv003a  umat002a  wtnv135a  zzzz255b  zzzz401b
 ```
 
 ### Performance
