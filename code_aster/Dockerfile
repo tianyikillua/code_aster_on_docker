@@ -75,7 +75,7 @@ RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && 
     cp libscalapack.so libblacs.so
 
 # Build parallel mumps
-COPY code_aster/data/patch_mumps /tmp/patch_mumps
+COPY --chown=aster:aster code_aster/data/patch_mumps /tmp/patch_mumps
 RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
     patch -s -p0 < patch_mumps && \
     cd mumps && \
@@ -117,7 +117,7 @@ RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
     make install
 
 # Build parallel aster
-COPY code_aster/data/cfg.py /tmp/cfg.py
+COPY --chown=aster:aster code_aster/data/cfg.py /tmp/cfg.py
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
