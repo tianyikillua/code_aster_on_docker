@@ -121,7 +121,6 @@ COPY code_aster/data/cfg.py /tmp/cfg.py
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
-    mv /tmp/cfg.py /tmp/aster/cfg.py && \
     export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
                      ${PUBLIC}/med-${MED_VER}/include \
                      ${PUBLIC}/metis-${METIS_VER}/include \
@@ -146,7 +145,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
     export GIBI_DIR=${PUBLIC}/gibi-2000 && \
     export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
-    ./waf configure --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
+    ./waf configure --use-config-dir=/tmp --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install
 
