@@ -4,20 +4,31 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Currently two images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Currently only the PETSc package is not used, due to a possible conflict between the `mumps` that it uses and the `mumps` directly used by `aster`. Its size is around 4.3 GB.
+1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.6 GB.
 
 ```
+              -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
+
+                     Version 13.4.0 modifiée le 29/06/2017
+                     révision 503b50e0ecda - branche 'v13'
+                         Copyright EDF R&D 1991 - 2018
+
                            Version de Python : 2.7.12
                            Version de NumPy : 1.11.0
                      Version de la librairie HDF5 : 1.8.14
                       Version de la librairie MED : 3.2.1
                      Version de la librairie MFront : 3.0.0
                      Version de la librairie MUMPS : 5.1.1
-                        Librairie PETSc : non disponible
+                    Version de la librairie PETSc : 3.7.7p0
                      Version de la librairie SCOTCH : 6.0.4
 ```
 
 2. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2017.0.2). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 8 GB.
+
+| Image name  | Build status                                                 | Description                         |
+| ----------- | ------------------------------------------------------------ | ----------------------------------- |
+| code_aster  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster |
+| salome_meca | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       |
 
 ### Introduction
 
@@ -49,7 +60,7 @@ docker run -ti --rm -v %cd%:/home/aster/shared quay.io/tianyikillua/code_aster
 
 If everything goes well, you will see the following message showing up in the terminal
 
-```sh
+```
 # Code_Aster latest stable version
 
 Welcome to Code_Aster!
@@ -83,11 +94,18 @@ for the parallel version.
 
 A simple `run_tests.sh` script file is available at `/home/aster` that will launch all the testcases available. You can just run
 
-```
+```sh
 ./run_tests.sh
 ```
 
 The test results are saved to `/home/aster/shared/test` (which will be shared with your host if you are using the `-v` command). A summary will also be given at the end.
+
+By default it will run the sequential version `stable`. You can define an environmental variable `ASRUN` to run the parallel version `stable_mpi`
+
+```sh
+export ASRUN="/home/aster/aster/bin/as_run --vers stable_mpi"
+./run_tests.sh
+```
 
 Using the sequential version provided here, only **183/3587** tests failed mainly due to lack of some features not provided by the `aster-full` package.
 
@@ -112,7 +130,7 @@ ssls131a  zzzz151a  zzzz216b
 - Missing `petsc` (7 cases)
 
 ```
-petsc*  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
+petsc03a  ttlv300a  wtna101a  zzzz351a  zzzz352a  zzzz352b  zzzz380a
 ```
 
 - Missing `miss3d` (25 cases)
