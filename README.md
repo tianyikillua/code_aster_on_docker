@@ -127,16 +127,21 @@ plexu* (except plexu10c)
 ssls131a  zzzz151a  zzzz216b
 ```
 
-- Missing `miss3d` (29 cases)
+- Missing `miss3d` (27 cases)
 
 ```
-fdlv112b  fdlv112e  fdlv112f  fdlv112g  fdlv112k  fdlv113a  sdls118a  sdls118d  sdlv133a  sdlx101a  sdlx101b  sdlx103a  sdlx104a  sdlx105a  sdlx106a  sdnx100a  sdnx100b  sdnx100c  sdnx100d  sdnx100e  sdnx100f  sdnx100g  sdnx101a  sdnx101b  sdnx101c  zzzz108c  zzzz200b
+fdlv112b  fdlv112e  fdlv112f  fdlv112g  fdlv112k  fdlv113a  sdls118a  sdls118d
+sdlv133a  sdlx101a  sdlx101b  sdlx103a  sdlx104a  sdlx105a  sdlx106a  sdnx100a
+sdnx100b  sdnx100c  sdnx100d  sdnx100e  sdnx100f  sdnx100g  sdnx101a  sdnx101b
+sdnx101c  zzzz108c  zzzz200b
 ```
 
 - Missing `ecrevisse` (19 cases)
 
 ```
-zzzz218a  zzzz218b  zzzz218c  zzzz354a  zzzz354b  zzzz354c  zzzz354d  zzzz354e  zzzz354f  zzzz354g  zzzz354h  zzzz355a  zzzz355b  zzzz355c  zzzz355d  zzzz355e  zzzz355f  zzzz355g  zzzz355h
+zzzz218a  zzzz218b  zzzz218c  zzzz354a  zzzz354b  zzzz354c  zzzz354d  zzzz354e
+zzzz354f  zzzz354g  zzzz354h  zzzz355a  zzzz355b  zzzz355c  zzzz355d  zzzz355e
+zzzz355f  zzzz355g  zzzz355h
 ```
 
 - Missing `CALC_MAC3COEUR` (31 cases)
@@ -154,8 +159,10 @@ sdls121a  sdls121b  sdls121c  zzzz159b  zzzz159e  zzzz159f
 - Missing material data (32 cases)
 
 ```
-hsnv131a  ort001a  ssll501a  ssna117a  ssna117b  ssna117c  ssnl121b  ssnl121c  ssnl128a  ssnl128b  ssnl128c  ssnl128d  ssnl131a  ssnl131b  ssnl131c  ssnl131d  ssnp132a  ssnv101c  ssnv113a  ssnv190a  ssnv190b  ssnv212a  ssnv213a  ssnv214a  ssnv215a  ssnv216a  zzzz118a
-zzzz118b  zzzz118c  zzzz118d  zzzz120a  zzzz120b
+hsnv131a   ort001a  ssll501a  ssna117a  ssna117b  ssna117c  ssnl121b  ssnl121c
+ssnl128a  ssnl128b  ssnl128c  ssnl128d  ssnl131a  ssnl131b  ssnl131c  ssnl131d
+ssnp132a  ssnv101c  ssnv113a  ssnv190a  ssnv190b  ssnv212a  ssnv213a  ssnv214a
+ssnv215a  ssnv216a  zzzz118a  zzzz118b  zzzz118c  zzzz118d  zzzz120a  zzzz120b
 ```
 
 - Missing `scipy` (1 case)
@@ -173,7 +180,8 @@ supv002a
 - Possible numerical issues to be investigated further (13 cases)
 
 ```
-erreu06a  forma11a  rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k  supv003a  umat002a  wtnv135a  zzzz255b  zzzz401b
+erreu06a  forma11a   rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k
+supv003a  umat002a  wtnv135a  zzzz255b  zzzz401b
 ```
 
 ### Performance
