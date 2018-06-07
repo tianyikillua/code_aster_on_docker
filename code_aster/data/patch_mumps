@@ -123,7 +123,7 @@ diff -ruN mumps/waftools/scotch.py mumps-with-parmetis-ptscotch/waftools/scotch.
              # default or SCOTCH_VERSION >= 5
 -            opts.scotch_libs = 'esmumps scotch scotcherr'
 +            if self.env.HAVE_MPI:
-+               opts.scotch_libs = 'esmumps ptscotch ptscotcherr ptscotcherrexit scotch scotcherr scotcherrexit'
++               opts.scotch_libs = 'esmumps scotch scotcherr ptesmumps ptscotch ptscotcherr'
 +            else :
 +               opts.scotch_libs = 'esmumps scotch scotcherr'
 
