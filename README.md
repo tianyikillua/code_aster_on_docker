@@ -112,7 +112,9 @@ Using the sequential and parallel versions provided here, only the following tes
 - Missing `xmgrace` (20 cases)
 
 ```
-forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b  ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a  ssnv219b  ssnv219c  ssnv219d  tplp107b
+forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b
+ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a
+ssnv219b  ssnv219c  ssnv219d  tplp107b
 ```
 
 - Missing `europlexus` (28 cases)
@@ -177,7 +179,7 @@ sdll151a
 supv002a
 ```
 
-- Possible numerical issues to be investigated further (13 cases)
+- Possible numerical issues to be investigated further (12 cases)
 
 ```
 erreu06a  forma11a   rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k
