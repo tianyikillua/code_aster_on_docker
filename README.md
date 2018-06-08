@@ -4,7 +4,7 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Currently two images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.6 GB.
+1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.5 GB.
 
 ```
               -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
@@ -181,14 +181,14 @@ supv002a
 
 ```
 erreu06a  forma11a   rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k
-supv003a  umat002a  wtnv135a  zzzz255b  zzzz401b
+supv003a  umat002a  wtnv135a  zzzz255b
 ```
 
 ### Performance
 
 On a Windows 10 host with 4 Intel(R) Xeon(R) W-2123 CPU @ 3.6 GHz, with the [Docker Community Edition for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), the following strong scaling result is obtained for the [perf0009d](https://www.code-aster.org/V2/spip.php?article260) testcase.
 
-![](https://user-images.githubusercontent.com/4027283/40848354-3905383e-65bf-11e8-9f5b-3802a155a969.png)
+![](https://user-images.githubusercontent.com/4027283/41157663-dfb66bc8-6b26-11e8-8706-98c186812d71.png)
 
 Since back-end virtualization may still be used by Docker under Mac and Windows, performance should be better under a native Linux environment using Docker.
 
