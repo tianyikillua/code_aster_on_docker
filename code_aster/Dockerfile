@@ -49,9 +49,11 @@ RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz &
     python setup.py install --prefix ${ASTER_ROOT} --noprompt
 
 # Build ptscotch
+COPY --chown=aster:aster code_aster/data/patch_ptscotch /tmp/patch_ptscotch
 RUN mkdir ptscotch && tar xf aster_full/${SCOTCH_SRC} -C ptscotch --strip-components 1 && \
+    patch -s -p0 < patch_ptscotch && \
     cd ptscotch/src && \
-    make ptscotch ptesmumps CCD=mpicc && \
+    make scotch esmumps ptscotch ptesmumps CCD=mpicc && \
     mkdir ${PUBLIC}/ptscotch-${SCOTCH_VER} && \
     make install prefix=${PUBLIC}/ptscotch-${SCOTCH_VER}
 
@@ -81,23 +83,12 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
     cd mumps && \
     export INCLUDES="${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
-                     ${PUBLIC}/scotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include" && \
     export LIBPATH="${PUBLIC}/metis-${METIS_VER}/lib \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
-                    ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
-    ./waf build --jobs=1 && \
-    ./waf install --jobs=1
-
-# Build special mumps for PETSc (without OpenMP, metis and scotch)
-RUN mkdir mumps_petsc && tar xf aster_full/${MUMPS_SRC} -C mumps_petsc --strip-components 1 && \
-    cd mumps_petsc && \
-    export INCLUDES="" && \
-    export LIBPATH="${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
-    ./waf configure --prefix=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps --enable-mpi --disable-openmp && \
     ./waf build --jobs=1 && \
     ./waf install --jobs=1
 
@@ -105,13 +96,17 @@ RUN mkdir mumps_petsc && tar xf aster_full/${MUMPS_SRC} -C mumps_petsc --strip-c
 RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
     mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
     cd petsc && \
-    ./configure --COPTFLAGS="-O2" \
+        ./configure --COPTFLAGS="-O2" \
                 --CXXOPTFLAGS="-O2" \
                 --FOPTFLAGS="-O2" \
                 --with-debugging=0 --with-shared-libraries=1 \
                 --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
-                --with-mumps-dir=${PUBLIC}/petsc-${PETSC_VER}/lib/mumps \
+                --with-mumps-dir=${PUBLIC}/mumps-${MUMPS_VER}_mpi \
+                --with-metis-dir=${PUBLIC}/metis-${METIS_VER} \
+                --with-parmetis-dir=${PUBLIC}/parmetis-${PARMETIS_VER} \
+                --with-ptscotch-dir=${PUBLIC}/ptscotch-${SCOTCH_VER} \
                 --download-hypre --download-ml \
+                --LIBS="-lgomp" \
                 --prefix=${PUBLIC}/petsc-${PETSC_VER} && \
     make all && \
     make install
@@ -125,7 +120,6 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                      ${PUBLIC}/med-${MED_VER}/include \
                      ${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
-                     ${PUBLIC}/scotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
                      ${PUBLIC}/petsc-${PETSC_VER}/include \
@@ -134,7 +128,6 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/med-${MED_VER}/lib \
                     ${PUBLIC}/metis-${METIS_VER}/lib \
                     ${PUBLIC}/parmetis-${PARMETIS_VER}/lib \
-                    ${PUBLIC}/scotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
