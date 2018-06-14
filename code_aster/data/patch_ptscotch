@@ -1,0 +1,12 @@
+diff -ruN ptscotch/src/Makefile.inc ptscotch-without-pthread/src/Makefile.inc
+--- ptscotch/src/Makefile.inc	2016-10-07 07:43:22.000000000 +0000
++++ ptscotch-without-pthread/src/Makefile.inc	2018-06-08 08:41:07.693702800 +0000
+@@ -9,7 +9,7 @@
+ CCS		= gcc
+ CCP		= mpicc
+ CCD		= gcc
+-CFLAGS		= -O3 -fPIC -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_RENAME_PARSER -DSCOTCH_PTHREAD -Drestrict=__restrict
++CFLAGS		= -O3 -fPIC -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_RENAME_PARSER -Drestrict=__restrict
+ CLIBFLAGS	=
+ LDFLAGS		= -fPIC -lz -lm -pthread -lrt
+ CP		= cp

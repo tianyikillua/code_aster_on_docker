@@ -4,7 +4,7 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Currently two images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.6 GB.
+1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.5 GB.
 
 ```
               -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
@@ -112,7 +112,9 @@ Using the sequential and parallel versions provided here, only the following tes
 - Missing `xmgrace` (20 cases)
 
 ```
-forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b  ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a  ssnv219b  ssnv219c  ssnv219d  tplp107b
+forma10a  forma10b  forma30b  sdld102a  sdnl105a  sdnl105b  sdns107a  sdns107b
+ssnl127a  ssnl127b  ssnl127c  ssnl127d  ssnl127e  ssnp150b  ssnp153a  ssnv194a
+ssnv219b  ssnv219c  ssnv219d  tplp107b
 ```
 
 - Missing `europlexus` (28 cases)
@@ -177,18 +179,22 @@ sdll151a
 supv002a
 ```
 
-- Possible numerical issues to be investigated further (13 cases)
+- Possible numerical issues to be investigated further (12 cases)
 
 ```
 erreu06a  forma11a   rccm01b  sdnd123a  ssnp504e  ssns115b  ssnv128r  ssnv157k
-supv003a  umat002a  wtnv135a  zzzz255b  zzzz401b
+supv003a  umat002a  wtnv135a  zzzz255b
 ```
 
 ### Performance
 
-On a Windows 10 host with 4 Intel(R) Xeon(R) W-2123 CPU @ 3.6 GHz, with the [Docker Community Edition for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), the following strong scaling result is obtained for the [perf0009d](https://www.code-aster.org/V2/spip.php?article260) testcase.
+On a Windows 10 host with 8 Intel(R) Xeon(R) W-2123 CPU @ 3.6 GHz, with the [Docker Community Edition for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), the following strong scaling result is obtained for the [perf009d](https://www.code-aster.org/V2/spip.php?article260) testcase.
 
-![](https://user-images.githubusercontent.com/4027283/40848354-3905383e-65bf-11e8-9f5b-3802a155a969.png)
+![](https://user-images.githubusercontent.com/4027283/41157663-dfb66bc8-6b26-11e8-8706-98c186812d71.png)
+
+Similarly, for the [perf015](https://www.code-aster.org/V2/spip.php?article662) testcases, we obtain
+
+![](https://user-images.githubusercontent.com/4027283/41162091-2b9c7506-6b35-11e8-9808-d02c99358ff7.png)
 
 Since back-end virtualization may still be used by Docker under Mac and Windows, performance should be better under a native Linux environment using Docker.
 
