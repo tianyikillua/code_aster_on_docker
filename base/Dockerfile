@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.22
+FROM phusion/baseimage:0.10.1
 
 # Get Ubuntu updates and basic packages
 USER root
@@ -27,7 +27,7 @@ ENV LC_ALL=C.UTF-8 \
 RUN adduser --disabled-password --gecos "" aster && \
     adduser aster sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    touch /etc/service/syslog-forwarder/down
+    rm /etc/my_init.d/10_syslog-ng.init
 
 # Create a sharable zone
 USER aster
