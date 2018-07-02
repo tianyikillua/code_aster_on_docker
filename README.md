@@ -4,7 +4,7 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Currently two images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 4.5 GB.
+1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 2.9 GB.
 
 ```
               -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
