@@ -13,9 +13,9 @@ ENV PETSC_VER=3.7.7
 ENV SCALAPACK_VER=2.0.2
 ENV ASTER_VER=13.4
 
-ENV SCOTCH_SRC="SRC/scotch-${SCOTCH_VER}-aster5.tar.gz"
-ENV MUMPS_SRC="SRC/mumps-${MUMPS_VER}-aster2.tar.gz"
-ENV ASTER_SRC="SRC/aster-${ASTER_VER}.0.tgz"
+ENV SCOTCH_SRC="scotch-${SCOTCH_VER}-aster5.tar.gz"
+ENV MUMPS_SRC="mumps-${MUMPS_VER}-aster2.tar.gz"
+ENV ASTER_SRC="aster-${ASTER_VER}.0.tgz"
 ENV SCALAPACK_SRC="http://www.netlib.org/scalapack/scalapack-${SCALAPACK_VER}.tgz"
 ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
 ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
@@ -46,16 +46,19 @@ WORKDIR /tmp
 RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz && \
     mkdir aster_full && tar xf aster_full.tar.gz -C aster_full --strip-components 1 && \
     cd aster_full && \
-    python setup.py install --prefix ${ASTER_ROOT} --noprompt
+    python setup.py install --prefix ${ASTER_ROOT} --noprompt && \
+    mv SRC/${SCOTCH_SRC} SRC/${MUMPS_SRC} SRC/${ASTER_SRC} /tmp && \
+    rm -rf /tmp/aster_full.tar.gz /tmp/aster_full
 
 # Build ptscotch
 COPY --chown=aster:aster code_aster/data/patch_ptscotch /tmp/patch_ptscotch
-RUN mkdir ptscotch && tar xf aster_full/${SCOTCH_SRC} -C ptscotch --strip-components 1 && \
+RUN mkdir ptscotch && tar xf ${SCOTCH_SRC} -C ptscotch --strip-components 1 && \
     patch -s -p0 < patch_ptscotch && \
     cd ptscotch/src && \
     make scotch esmumps ptscotch ptesmumps CCD=mpicc && \
     mkdir ${PUBLIC}/ptscotch-${SCOTCH_VER} && \
-    make install prefix=${PUBLIC}/ptscotch-${SCOTCH_VER}
+    make install prefix=${PUBLIC}/ptscotch-${SCOTCH_VER} && \
+    rm -rf /tmp/${SCOTCH_SRC} /tmp/patch_ptscotch /tmp/ptscotch
 
 # Build parmetis
 RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
@@ -63,7 +66,8 @@ RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
     cd parmetis && \
     make config prefix=${PUBLIC}/parmetis-${PARMETIS_VER} && \
     make && \
-    make install
+    make install && \
+    rm -rf /tmp/parmetis.tar.gz /tmp/parmetis
 
 # Build scalapack
 RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && \
@@ -74,11 +78,12 @@ RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && 
     make && \
     make install && \
     cd ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib && \
-    cp libscalapack.so libblacs.so
+    cp libscalapack.so libblacs.so && \
+    rm -rf /tmp/scalapack.tar.gz /tmp/scalapack
 
 # Build parallel mumps
 COPY --chown=aster:aster code_aster/data/patch_mumps /tmp/patch_mumps
-RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 && \
+RUN mkdir mumps && tar xf ${MUMPS_SRC} -C mumps --strip-components 1 && \
     patch -s -p0 < patch_mumps && \
     cd mumps && \
     export INCLUDES="${PUBLIC}/metis-${METIS_VER}/include \
@@ -90,13 +95,14 @@ RUN mkdir mumps && tar xf aster_full/${MUMPS_SRC} -C mumps --strip-components 1 
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib" && \
     ./waf configure --prefix=${PUBLIC}/mumps-${MUMPS_VER}_mpi --install-tests --enable-mpi && \
     ./waf build --jobs=1 && \
-    ./waf install --jobs=1
+    ./waf install --jobs=1 && \
+    rm -rf /tmp/${MUMPS_SRC} /tmp/patch_mumps /tmp/mumps
 
 # Build parallel PETSc
 RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
     mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
     cd petsc && \
-        ./configure --COPTFLAGS="-O2" \
+    ./configure --COPTFLAGS="-O2" \
                 --CXXOPTFLAGS="-O2" \
                 --FOPTFLAGS="-O2" \
                 --with-debugging=0 --with-shared-libraries=1 \
@@ -109,12 +115,13 @@ RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
                 --LIBS="-lgomp" \
                 --prefix=${PUBLIC}/petsc-${PETSC_VER} && \
     make all && \
-    make install
+    make install && \
+    rm -rf /tmp/petsc.tar.gz /tmp/petsc
 
 # Build parallel aster
 COPY --chown=aster:aster code_aster/data/cfg.py /tmp/cfg.py
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
-    mkdir aster && tar xf aster_full/${ASTER_SRC} -C aster --strip-components 1 && \
+    mkdir aster && tar xf ${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
     export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
                      ${PUBLIC}/med-${MED_VER}/include \
@@ -140,7 +147,8 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
     ./waf configure --use-config-dir=/tmp --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
-    ./waf install
+    ./waf install && \
+    rm -rf /tmp/${ASTER_SRC} /tmp/cfg.py /tmp/aster
 
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
