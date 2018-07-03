@@ -15,7 +15,10 @@ RUN wget --no-check-certificate --quiet \
     https://www.code-aster.org/FICHIERS/Salome-Meca-2017.0.2-LGPL-2.tgz && \
     tar xf Salome-Meca-2017.0.2-LGPL-2.tgz && \
     ./Salome-Meca-2017.0.2-LGPL-2.run && \
-    rm Salome-Meca-2017.0.2-LGPL-2.*
+    rm Salome-Meca-2017.0.2-LGPL-2.* && \
+    rm -rf salome_meca/appli_V2017.0.2 salome_meca/V2017.0.2/modules && \
+    cd salome_meca/V2017.0.2/prerequisites && \
+    rm -rf Paraview-v512_EDF Qt-5611
 
 # Add as_run into PATH
 RUN echo "" >> .bashrc && \
