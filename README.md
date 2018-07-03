@@ -23,7 +23,7 @@ Currently two images are available:
                      Version de la librairie SCOTCH : 6.0.4
 ```
 
-2. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2017.0.2). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 5.6 GB.
+2. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2017.0.2). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Additional packages such as `ecrevisse` are also provided. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 4.1 GB.
 
 | Image name  | Build status                                                 | Description                         |
 | ----------- | ------------------------------------------------------------ | ----------------------------------- |
