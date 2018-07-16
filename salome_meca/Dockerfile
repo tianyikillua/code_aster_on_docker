@@ -12,17 +12,17 @@ RUN apt-get update && \
 USER aster
 WORKDIR /home/aster
 RUN wget --no-check-certificate --quiet \
-    https://www.code-aster.org/FICHIERS/Salome-Meca-2017.0.2-LGPL-2.tgz && \
-    tar xf Salome-Meca-2017.0.2-LGPL-2.tgz && \
-    ./Salome-Meca-2017.0.2-LGPL-2.run && \
-    rm Salome-Meca-2017.0.2-LGPL-2.* && \
-    rm -rf salome_meca/appli_V2017.0.2 salome_meca/V2017.0.2/modules && \
-    cd salome_meca/V2017.0.2/prerequisites && \
-    rm -rf Paraview-v512_EDF Qt-5611
+    https://www.code-aster.org/FICHIERS/salome_meca-2018-LGPL-1.tgz && \
+    tar xf salome_meca-2018-LGPL-1.tgz && \
+    ./salome_meca-2018-LGPL-1.run && \
+    rm salome_meca-2018-LGPL-1.*
+    # rm -rf salome_meca/appli_V2018 salome_meca/V2018/modules && \
+    # cd salome_meca/V2018/prerequisites && \
+    # rm -rf Paraview-v541p2 Qt-591
 
 # Add as_run into PATH
 RUN echo "" >> .bashrc && \
-    echo "source ~/salome_meca/V2017.0.2/salome_prerequisites.sh" >> .bashrc && \
+    echo "source ~/salome_meca/V2018/salome_prerequisites.sh" >> .bashrc && \
     echo "cat ~/WELCOME" >> .bashrc && \
     echo "echo" >> .bashrc
 
