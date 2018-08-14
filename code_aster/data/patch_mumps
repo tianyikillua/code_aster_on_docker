@@ -114,26 +114,6 @@ diff -ruN mumps/waftools/parmetis.py mumps-with-parmetis-ptscotch/waftools/parme
 +        raise
 +    else:
 +        self.end_msg(vers)
-diff -ruN mumps/waftools/scotch.py mumps-with-parmetis-ptscotch/waftools/scotch.py
---- mumps/waftools/scotch.py	2017-08-08 09:32:58.000000000 +0200
-+++ mumps-with-parmetis-ptscotch/waftools/scotch.py	2018-06-05 18:40:38.699469000 +0200
-@@ -45,7 +45,10 @@
-             opts.scotch_libs = 'scotch scotcherr scotcherrexit'
-         else:
-             # default or SCOTCH_VERSION >= 5
--            opts.scotch_libs = 'esmumps scotch scotcherr'
-+            if self.env.HAVE_MPI:
-+               opts.scotch_libs = 'esmumps scotch scotcherr ptesmumps ptscotch ptscotcherr'
-+            else :
-+               opts.scotch_libs = 'esmumps scotch scotcherr'
-
-     # Code_Aster v11.0.1: FICHE 016627
-     if 'scotchmetis' in opts.scotch_libs:
-@@ -105,4 +108,3 @@
-         raise
-     else:
-         self.end_msg( '.'.join([str(i) for i in eval(ret)]) )
--
 diff -ruN mumps/wscript mumps-with-parmetis-ptscotch/wscript
 --- mumps/wscript	2018-06-05 19:18:25.432286700 +0200
 +++ mumps-with-parmetis-ptscotch/wscript	2018-06-05 18:32:16.369572100 +0200
