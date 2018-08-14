@@ -47,7 +47,7 @@ Currently three images are available:
 | Image name                         | Build status                                                 | Description                         | Version | Size   |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- | ------- | ------ |
 | `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster | 13.6    | 3.1 GB |
-| `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
+| `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster_testing) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
 | `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       | 2018    | 4.1 GB |
 
 ### Introduction
