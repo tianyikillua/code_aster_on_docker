@@ -39,7 +39,6 @@ COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "" >> .bashrc && \
     echo "source /home/aster/aster/etc/codeaster/profile.sh" >> .bashrc && \
-    echo "export PATH=/home/aster/aster/public/gmsh-3.0.6-Linux64/bin:$PATH" >> .bashrc && \
     echo "cat ~/WELCOME" >> .bashrc && \
     echo "echo" >> .bashrc
 
