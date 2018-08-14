@@ -7,17 +7,16 @@ stable release of Code_Aster containing the following
 components:
 
 - hdf5 1.8.14
-- med 3.2.1
-- gmsh 2.12.0
+- med 3.3.1
+- gmsh 3.0.6
 - grace 5.1.23
-- gibi 2000
 - scotch 6.0.4
-- astk 1.13.10
+- astk 2018.0
 - metis 5.1.0
-- mfront 3.0.0
+- tfel 3.0.0
 - mumps 5.1.1
-- homard 11.7
-- aster 13.4.0
+- homard 11.10
+- aster 13.6.0
 
 To execute an "export" file, just run
 

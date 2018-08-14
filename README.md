@@ -4,19 +4,19 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Currently three images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 2.9 GB.
+1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.6). Both the sequential and parallel (MPI) versions are available. Its size is around 3.1 GB.
 
 ```
               -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
 
-                     Version 13.4.0 modifiée le 29/06/2017
-                     révision 503b50e0ecda - branche 'v13'
+                     Version 13.6.0 modifiée le 21/06/2018
+                     révision fb950a49b96d - branche 'v13'
                          Copyright EDF R&D 1991 - 2018
 
                            Version de Python : 2.7.12
                            Version de NumPy : 1.11.0
                      Version de la librairie HDF5 : 1.8.14
-                      Version de la librairie MED : 3.2.1
+                      Version de la librairie MED : 3.3.1
                      Version de la librairie MFront : 3.0.0
                      Version de la librairie MUMPS : 5.1.1
                     Version de la librairie PETSc : 3.7.7p0
@@ -34,9 +34,6 @@ Currently three images are available:
 
                            Version de Python : 2.7.12
                            Version de NumPy : 1.11.0
-                           Parallélisme MPI : inactif
-                          Parallélisme OpenMP : actif
-                        Nombre de processus utilisés : 1
                      Version de la librairie HDF5 : 1.8.14
                       Version de la librairie MED : 3.3.1
                      Version de la librairie MFront : 3.1.1
@@ -49,7 +46,7 @@ Currently three images are available:
 
 | Image name                         | Build status                                                 | Description                         | Version | Size   |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- | ------- | ------ |
-| `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster | 13.4    | 2.9 GB |
+| `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster | 13.6    | 3.1 GB |
 | `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
 | `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       | 2018    | 4.1 GB |
 
