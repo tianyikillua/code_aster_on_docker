@@ -33,6 +33,7 @@ RUN apt-get update && \
     make cmake \
     zlib1g-dev \
     tk bison flex \
+    libglu1-mesa libxcursor-dev \
     libmpich-dev \
     libopenblas-dev \
     libboost-python-dev && \
