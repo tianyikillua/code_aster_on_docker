@@ -3,7 +3,7 @@ LABEL maintainer "Tianyi Li <tianyikillua@gmail.com>"
 
 # Variables
 ENV HDF5_VER=1.8.14
-ENV MED_VER=3.2.1
+ENV MED_VER=3.3.1
 ENV METIS_VER=5.1.0
 ENV PARMETIS_VER=4.0.3
 ENV SCOTCH_VER=6.0.4
@@ -11,7 +11,7 @@ ENV MUMPS_VER=5.1.1
 ENV MFRONT_VER=3.0.0
 ENV PETSC_VER=3.7.7
 ENV SCALAPACK_VER=2.0.2
-ENV ASTER_VER=13.4
+ENV ASTER_VER=13.6
 
 ENV SCOTCH_SRC="scotch-${SCOTCH_VER}-aster5.tar.gz"
 ENV MUMPS_SRC="mumps-${MUMPS_VER}-aster2.tar.gz"
@@ -20,7 +20,7 @@ ENV SCALAPACK_SRC="http://www.netlib.org/scalapack/scalapack-${SCALAPACK_VER}.tg
 ENV PARMETIS_SRC="http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-${PARMETIS_VER}.tar.gz"
 ENV PETSC_SRC="https://bitbucket.org/petsc/petsc/get/v${PETSC_VER}.tar.gz"
 
-ENV ASTER_FULL_SRC="https://www.code-aster.org/FICHIERS/aster-full-src-13.4.0-3.noarch.tar.gz"
+ENV ASTER_FULL_SRC="https://www.code-aster.org/FICHIERS/aster-full-src-13.6.0-1.noarch.tar.gz"
 ENV ASTER_ROOT=/home/aster/aster
 ENV PUBLIC=$ASTER_ROOT/public
 
@@ -130,7 +130,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
                      ${PUBLIC}/petsc-${PETSC_VER}/include \
-                     ${PUBLIC}/mfront-${MFRONT_VER}/include" && \
+                     ${PUBLIC}/tfel-${MFRONT_VER}/include" && \
     export LIBPATH="${PUBLIC}/hdf5-${HDF5_VER}/lib \
                     ${PUBLIC}/med-${MED_VER}/lib \
                     ${PUBLIC}/metis-${METIS_VER}/lib \
@@ -139,12 +139,11 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
                     ${PUBLIC}/petsc-${PETSC_VER}/lib \
-                    ${PUBLIC}/mfront-${MFRONT_VER}/lib" && \
+                    ${PUBLIC}/tfel-${MFRONT_VER}/lib" && \
     export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
-    export TFELHOME=${PUBLIC}/mfront-${MFRONT_VER} && \
-    export GMSH_BIN_DIR=${PUBLIC}/gmsh-2.12.0-Linux/bin && \
-    export GIBI_DIR=${PUBLIC}/gibi-2000 && \
-    export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.7 && \
+    export TFELHOME=${PUBLIC}/tfel-${MFRONT_VER} && \
+    export GMSH_BIN_DIR=${PUBLIC}/gmsh-3.0.6-Linux64/bin && \
+    export HOMARD_ASTER_ROOT_DIR=${PUBLIC}/homard-11.10 && \
     ./waf configure --use-config-dir=/tmp --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install && \
@@ -164,8 +163,3 @@ RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${AST
     echo "echo" >> .bashrc
 
 USER root
-
-# TODO: install the latest sequential and parallel development version
-# ENV MED_SRC="http://files.salome-platform.org/Salome/other/med-3.3.1.tar.gz"
-# ENV MFRONT_SRC="https://sourceforge.net/projects/tfel/files/tfel-3.1.1.tar.bz2"
-# ENV MUMPS_SRC="https://bitbucket.org/code_aster/mumps/get/5.1.2_aster4.tar.gz"
