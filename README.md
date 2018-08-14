@@ -2,7 +2,7 @@
 
 This repository contains the Dockerfiles for building images of [Code_Aster](https://bitbucket.org/code_aster/codeaster-src) inside a Ubuntu base system. The built images are available on [quay.io](https://quay.io/tianyikillua). Using [Docker](https://www.docker.com/) you can directly execute Code_Aster on virtually any platform (Linux, Mac, Windows, ...) and without having to compile yourself the full package (`hdf5`, `med`, `mumps`, etc).
 
-Currently two images are available:
+Currently three images are available:
 
 1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.4). Both the sequential and parallel (MPI) versions are available. Its size is around 2.9 GB.
 
@@ -23,11 +23,34 @@ Currently two images are available:
                      Version de la librairie SCOTCH : 6.0.4
 ```
 
-2. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2018). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Additional packages such as `ecrevisse` are also provided. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 4.1 GB.
+2. `quay.io/tianyikillua/code_aster_testing`: a `GCC`-based build of the latest testing version (14.2). Currently only the sequential version is available. Its size is around 2.3 GB.
+
+```
+        -- CODE_ASTER -- VERSION : DÉVELOPPEMENT STABILISÉE (testing) --
+
+                     Version 14.2.0 modifiée le 21/06/2018
+                   révision db2699f0662a - branche 'default'
+                         Copyright EDF R&D 1991 - 2018
+
+                           Version de Python : 2.7.12
+                           Version de NumPy : 1.11.0
+                           Parallélisme MPI : inactif
+                          Parallélisme OpenMP : actif
+                        Nombre de processus utilisés : 1
+                     Version de la librairie HDF5 : 1.8.14
+                      Version de la librairie MED : 3.3.1
+                     Version de la librairie MFront : 3.1.1
+                     Version de la librairie MUMPS : 5.1.2
+                        Librairie PETSc : non disponible
+                     Version de la librairie SCOTCH : 6.0.4
+```
+
+3. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2018). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Additional packages such as `ecrevisse` are also provided. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 4.1 GB.
 
 | Image name                         | Build status                                                 | Description                         | Version | Size   |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- | ------- | ------ |
 | `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster | 13.4    | 2.9 GB |
+| `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
 | `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       | 2018    | 4.1 GB |
 
 ### Introduction
@@ -47,13 +70,13 @@ where `-ti` stands for an interactive process and `--rm` means the container wil
 2. If you also want to share your current working directory into the container (for instance, use `as_run` to launch a `.comm` simulation file along with all the other data files, prepared in the current directory)
 
 ```sh
-docker run -ti --rm -v $(pwd):/home/aster/shared quay.io/tianyikillua/code_aster
+docker run -ti --rm -v $(pwd):/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
 ```
 
 The Windows users may need to use the following command
 
 ```powershell
-docker run -ti --rm -v %cd%:/home/aster/shared quay.io/tianyikillua/code_aster
+docker run -ti --rm -v %cd%:/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
 ```
 
 ### Usage

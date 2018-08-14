@@ -34,11 +34,12 @@ RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz &
 
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
-COPY code_aster/WELCOME /home/aster/WELCOME
+COPY code_aster_testing/WELCOME /home/aster/WELCOME
 COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "" >> .bashrc && \
-    echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
+    echo "source /home/aster/aster/etc/codeaster/profile.sh" >> .bashrc && \
+    echo "export PATH=/home/aster/aster/public/gmsh-3.0.6-Linux64/bin:$PATH" >> .bashrc && \
     echo "cat ~/WELCOME" >> .bashrc && \
     echo "echo" >> .bashrc
 
