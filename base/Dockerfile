@@ -23,11 +23,14 @@ ENV LC_ALL=C.UTF-8 \
     LANG=C.UTF-8 \
     LANGUAGE=C.UTF-8
 
+COPY set-home-permissions.sh /etc/my_init.d/set-home-permissions.sh
+
 # Add a new user
 RUN adduser --disabled-password --gecos "" aster && \
     adduser aster sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    rm /etc/my_init.d/10_syslog-ng.init
+    rm /etc/my_init.d/10_syslog-ng.init && \
+    chmod +x /etc/my_init.d/set-home-permissions.sh 
 
 # Create a sharable zone
 USER aster
