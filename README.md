@@ -1,6 +1,8 @@
 # Docker for Code_Aster
 
-This repository contains the Dockerfiles for building images of [Code_Aster](https://bitbucket.org/code_aster/codeaster-src) inside a Ubuntu base system. The built images are available on [quay.io](https://quay.io/tianyikillua). Using [Docker](https://www.docker.com/) you can directly execute Code_Aster on virtually any platform (Linux, Mac, Windows, ...) and without having to compile yourself the full package (`hdf5`, `med`, `mumps`, etc).
+This repository contains the Dockerfiles for building images of [Code_Aster](https://bitbucket.org/code_aster/codeaster-src) inside a Ubuntu based system. The built images are available on [quay.io](https://quay.io/tianyikillua). Using [Docker](https://www.docker.com/) you can directly execute Code_Aster on virtually any platform (Linux, Mac, Windows, ...) and without having to compile yourself the full package (`hdf5`, `med`, `mumps`, etc).
+
+Some files are based on the [Docker files of the FEniCS project](https://bitbucket.org/fenics-project/docker).
 
 Currently three images are available:
 
@@ -50,33 +52,21 @@ Currently three images are available:
 | `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster_testing) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
 | `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       | 2018    | 4.1 GB |
 
-### Introduction
+### Introduction and usage
 
 To install Docker for your platform, follow the instructions at [docker.com](https://www.docker.com/get-docker). The [tutorial](https://docs.docker.com/get-started) provided there may also be useful.
 
-One you have Docker installed, you can use the following commands to run the here provided Code_Aster image.
+One you have Docker installed, you can use the following commands to enjoy this Code_Aster image.
 
-1. To run an interactive `bash` terminal containing the `as_run` command in its `PATH`
+#### Preliminary verification
+
+We can run an interactive `bash` session containing in particular the `as_run` command in its `PATH`
 
 ```sh
 docker run -ti --rm quay.io/tianyikillua/code_aster
 ```
 
 where `-ti` stands for an interactive process and `--rm` means the container will be automatically removed when it exits, in order to save disk space.
-
-2. If you also want to share your current working directory into the container (for instance, use `as_run` to launch a `.comm` simulation file along with all the other data files, prepared in the current directory)
-
-```sh
-docker run -ti --rm -v $(pwd):/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
-```
-
-The Windows users may need to use the following command
-
-```powershell
-docker run -ti --rm -v %cd%:/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
-```
-
-### Usage
 
 If everything goes well, you will see the following message showing up in the terminal
 
@@ -96,7 +86,7 @@ To execute an "export" file, just run
     as_run foo.export
 ```
 
-To immediately verify that Code_Aster indeed works, launch a simple testcase
+To immediately verify that Code_Aster indeed works, you may launch a simple testcase (here `forma02a`)
 
 ```sh
 as_run --test forma02a
@@ -109,6 +99,58 @@ as_run --vers stable_mpi --test forma02a
 ```
 
 for the parallel version.
+
+#### Running simulation via `as_run` inside an interactive session
+
+You already have all simulation files and an `export` file `test.export` defining all input/outputs in your current directory. You can first open an interactive session as before, and then run the simulation using the `as_run` command. In this case, you also need to share your current working directory into the container directory `/home/aster/shared` via the `-v` command. The `-w` command defines the starting working directory.
+
+```sh
+docker run -ti --rm -v $(pwd):/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
+as_run test.export
+```
+
+The Windows users may need to replace `$(pwd)` by `%cd%`.
+
+Of course, you need to have a correct `export` file.
+
+1. All files should be accessible by Docker via the `/home/aster/shared` directory. They should be given using their relative path or absolute path including `/home/aster/shared`, like this
+
+```
+F comm /home/aster/shared/test.comm D 1
+F mmed /home/aster/shared/test.med D 20
+F mess /home/aster/shared/test.mess R 6
+F resu /home/aster/shared/test.resu R 8
+```
+
+2. In order to use the parallel version, you should have
+
+```
+P version stable_mpi
+```
+
+#### Running simulation via a direct `as_run` command
+
+You can also directly run the simulation by indicating the exact command to Docker, without opening an interactive session. Suppose you want to run `test.export`, you can directly run in your host
+
+```sh
+docker run --rm -v $(pwd):/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster "/home/aster/aster/bin/as_run test.export"
+```
+
+Note that you have to specify the absolute path of `as_run` (`/home/aster/aster/bin/as_run`).
+
+#### Running simulation via `astk`
+
+You can also use the graphical interface `astk` to run your simulations, which will automatically write an `export` file for you.
+
+1. For Windows users, download and open a X11 server via [MobaXterm](https://mobaxterm.mobatek.net) or [vcXsrc](https://sourceforge.net/projects/vcxsrv), etc.
+2. Get your IP address (use `ipconfig` for Windows users)
+3. Run the following in the directory containing simulations files
+
+```sh
+docker run -ti --rm -e DISPLAY=[YOUR IP ADDRESS]:0 -v $(pwd):/home/aster/shared -w /home/aster/shared quay.io/tianyikillua/code_aster
+```
+
+4. Run `astk` in your terminal, and voilà (see [here](https://user-images.githubusercontent.com/4027283/59491059-7323d200-8e86-11e9-8bba-13f41012236f.png)). Remember to define a `ncpus` value before running your simulation (see [here](https://user-images.githubusercontent.com/4027283/59494661-ed0b8980-8e8d-11e9-8c0e-358396dfb1ba.png)).
 
 ### Testcases qualification
 
