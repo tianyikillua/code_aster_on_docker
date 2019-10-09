@@ -53,9 +53,9 @@ Currently the following images are available:
 | Image name                         | Build status                                                 | Description                         | Version |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- | ------- |
 | `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Code_Aster | 14.4    |
-| `quay.io/tianyikillua/code_aster:v13`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster:v13) | Code_Aster | 13.6    |
+| `quay.io/tianyikillua/code_aster:v13`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Code_Aster | 13.6    |
 | `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Salome_Meca       | 2019    |
-| `quay.io/tianyikillua/salome_meca:v2018` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca:v2018) | Salome_Meca       | 2018    |
+| `quay.io/tianyikillua/salome_meca:v2018` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Salome_Meca       | 2018    |
 
 ### Introduction and usage
 
@@ -269,4 +269,4 @@ Since back-end virtualization may still be used by Docker under Mac and Windows,
 
 ### Author
 
-[Tianyi Li](https://www.linkedin.com/in/tianyikillua) ([tianyikillua@gmail.com](mailto:tianyikillua@gmail.com)) @ [Promold](https://www.linkedin.com/company/promold-paris)
+[Tianyi Li](https://www.linkedin.com/in/tianyikillua) ([tianyikillua@gmail.com](mailto:tianyikillua@gmail.com))
