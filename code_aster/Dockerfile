@@ -122,6 +122,7 @@ RUN mkdir mumps && tar xf ${MUMPS_SRC} -C mumps --strip-components 1 && \
 # Build parallel aster
 COPY --chown=aster:aster code_aster/data/cfg.py /tmp/cfg.py
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
+    . ${ASTER_ROOT}/etc/codeaster/profile.sh && \
     mkdir aster && tar xf ${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
     export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
