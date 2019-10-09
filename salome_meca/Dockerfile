@@ -16,9 +16,6 @@ RUN wget --no-check-certificate --quiet \
     tar xf salome_meca-2019.0.0-1-LGPL.tgz && \
     ./salome_meca-2019.0.0-1-LGPL.run && \
     rm salome_meca-2019.0.0-1-LGPL.*
-    # rm -rf salome_meca/appli_V2018 salome_meca/V2018/modules && \
-    # cd salome_meca/V2018/prerequisites && \
-    # rm -rf Paraview-v541p2 Qt-591
 
 # Add as_run into PATH
 RUN echo "" >> .bashrc && \

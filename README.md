@@ -4,9 +4,9 @@ This repository contains the Dockerfiles for building images of [Code_Aster](htt
 
 Some files are based on the [Docker files of the FEniCS project](https://bitbucket.org/fenics-project/docker).
 
-Currently three images are available:
+Currently the following images are available:
 
-1. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the latest stable version (13.6). Both the sequential and parallel (MPI) versions are available. Its size is around 3.1 GB.
+1. `quay.io/tianyikillua/code_aster:v13`: a `GCC`-based build of the 13.6 version. Both the sequential and parallel (MPI) versions are available. Its size is around 3.1 GB.
 
 ```
               -- CODE_ASTER -- VERSION : EXPLOITATION (stable) --
@@ -25,7 +25,7 @@ Currently three images are available:
                      Version de la librairie SCOTCH : 6.0.4
 ```
 
-2. `quay.io/tianyikillua/code_aster_testing`: a `GCC`-based build of the latest testing version (14.2). Currently only the sequential version is available. Its size is around 2.3 GB.
+2. `quay.io/tianyikillua/code_aster`: a `GCC`-based build of the 14.4 version. Both the sequential and parallel (MPI) versions are available. Its size is around X GB.
 
 ```
         -- CODE_ASTER -- VERSION : DÉVELOPPEMENT STABILISÉE (testing) --
@@ -44,13 +44,16 @@ Currently three images are available:
                      Version de la librairie SCOTCH : 6.0.4
 ```
 
-3. `quay.io/tianyikillua/salome_meca`: the latest release of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) (2018). Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Additional packages such as `ecrevisse` are also provided. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 4.1 GB.
+3. `quay.io/tianyikillua/salome_meca`: the official releases of [Salome_Meca](https://www.code-aster.org/V2/spip.php?article295) Only the sequential version is available, but `aster` is compiled with Intel compilers that in general give better performance. Additional packages such as `ecrevisse` are also provided. Unnecessary modules could in fact be removed to reduce the image size, which is currently around 4.1 GB.
+
+There is a `profile.sh` issue in the latest 2019 version that prevents its operational usage (`as_run` does not work). To investigate.
 
 | Image name                         | Build status                                                 | Description                         | Version | Size   |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- | ------- | ------ |
-| `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Latest stable version of Code_Aster | 13.6    | 3.1 GB |
+| `quay.io/tianyikillua/code_aster`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster) | Code_Aster | 13.6    | 3.1 GB |
 | `quay.io/tianyikillua/code_aster_testing`  | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/code_aster_testing/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/code_aster_testing) | Latest testing version of Code_Aster | 14.2    | 2.3 GB |
-| `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca) | Latest release of Salome_Meca       | 2018    | 4.1 GB |
+| `quay.io/tianyikillua/salome_meca:v2018` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca:v2018) | Salome_Meca       | 2018    | 4.1 GB |
+| `quay.io/tianyikillua/salome_meca` | [![Docker Repository on Quay](https://quay.io/repository/tianyikillua/salome_meca/status "Docker Repository on Quay")](https://quay.io/repository/tianyikillua/salome_meca:v2018) | Salome_Meca       | 2019    | 4.1 GB |
 
 ### Introduction and usage
 
