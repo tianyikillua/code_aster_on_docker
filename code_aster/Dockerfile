@@ -156,6 +156,7 @@ COPY run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
     echo "localhost" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
+    echo "mpi_get_procid_cmd : echo \$PMI_RANK" >> ${ASTER_ROOT}/etc/codeaster/asrun && \
     rm -rf /tmp/* && \
     echo "" >> .bashrc && \
     echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
