@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.11
 
 # Get Ubuntu updates and basic packages
 USER root
@@ -8,11 +8,11 @@ RUN apt-get update && \
     locales sudo \
     gcc g++ gfortran \
     wget \
-    python \
-    python-dev \
-    python-numpy \
-    python-qt4 \
+    python3 \
+    python3-dev \
+    python3-numpy \
     libxft2 \
+    libxmu6 \
     libxss1 && \
     echo "C.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
@@ -30,7 +30,7 @@ RUN adduser --disabled-password --gecos "" aster && \
     adduser aster sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     rm /etc/my_init.d/10_syslog-ng.init && \
-    chmod +x /etc/my_init.d/set-home-permissions.sh 
+    chmod +x /etc/my_init.d/set-home-permissions.sh
 
 # Create a sharable zone
 USER aster
