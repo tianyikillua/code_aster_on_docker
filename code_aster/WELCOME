@@ -1,22 +1,20 @@
-# Code_Aster latest stable version
+# Code_Aster 14.4
 
 Welcome to Code_Aster!
 
-This image provides a GCC-based build of the latest
-stable release of Code_Aster containing the following
+This image provides a GCC-based build of the 14.4 version of Code_Aster containing the following
 components:
 
-- hdf5 1.8.14
-- med 3.3.1
+- hdf5 1.10.3
+- med 4.0.0
 - gmsh 3.0.6
-- grace 5.1.23
 - scotch 6.0.4
-- astk 2018.0
+- astk 2019.0
 - metis 5.1.0
-- tfel 3.0.0
-- mumps 5.1.1
-- homard 11.10
-- aster 13.6.0
+- mfront 3.2.1
+- mumps 5.1.2
+- homard 11.12
+- aster 14.4.0
 
 To execute an "export" file, just run
 
