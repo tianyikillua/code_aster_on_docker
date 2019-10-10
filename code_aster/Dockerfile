@@ -50,7 +50,9 @@ RUN wget --no-check-certificate --quiet ${ASTER_FULL_SRC} -O aster_full.tar.gz &
     cd aster_full && \
     python3 setup.py install --prefix ${ASTER_ROOT} --noprompt && \
     mv SRC/${SCOTCH_SRC} SRC/${MUMPS_SRC} SRC/${ASTER_SRC} /tmp && \
-    rm -rf /tmp/aster_full.tar.gz /tmp/aster_full
+    rm -rf /tmp/aster_full.tar.gz /tmp/aster_full && \
+    cd ${PUBLIC}/tfel-${MFRONT_VER}/bin && \
+    ln -s mfront-3.2.1 mfront
 
 # Build ptscotch
 RUN mkdir ptscotch && tar xf ${SCOTCH_SRC} -C ptscotch --strip-components 1 && \
@@ -151,15 +153,16 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
 
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
-COPY code_aster/WELCOME /home/aster/WELCOME
-COPY run_tests.sh /home/aster/run_tests.sh
+COPY --chown=aster:aster code_aster/WELCOME /home/aster/WELCOME
+COPY --chown=aster:aster run_tests.sh /home/aster/run_tests.sh
 
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
     echo "localhost" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
     echo "mpi_get_procid_cmd : echo \$PMI_RANK" >> ${ASTER_ROOT}/etc/codeaster/asrun && \
     rm -rf /tmp/* && \
     echo "" >> .bashrc && \
-    echo "source ~/aster/etc/codeaster/profile.sh" >> .bashrc && \
+    echo "source ${ASTER_ROOT}/etc/codeaster/profile.sh" >> .bashrc && \
+    echo "source ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh" >> .bashrc && \
     echo "cat ~/WELCOME" >> .bashrc && \
     echo "echo" >> .bashrc
 
