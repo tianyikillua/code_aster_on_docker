@@ -149,7 +149,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     ./waf configure --use-config-dir=/tmp --use-config=cfg --prefix=${ASTER_ROOT}/${ASTER_VER}_mpi --install-tests --enable-mpi && \
     ./waf build && \
     ./waf install && \
-    rm -rf /tmp/${ASTER_SRC} /tmp/cfg.py /tmp/aster
+    rm -rf /tmp/*
 
 # Add a welcome message and a script for testcases
 WORKDIR /home/aster
@@ -159,7 +159,6 @@ COPY --chown=aster:aster run_tests.sh /home/aster/run_tests.sh
 RUN echo "vers : stable_mpi:${ASTER_ROOT}/${ASTER_VER}_mpi/share/aster" >> ${ASTER_ROOT}/etc/codeaster/aster && \
     echo "localhost" > ${ASTER_ROOT}/etc/codeaster/mpi_hostfile && \
     echo "mpi_get_procid_cmd : echo \$PMI_RANK" >> ${ASTER_ROOT}/etc/codeaster/asrun && \
-    rm -rf /tmp/* && \
     echo "" >> .bashrc && \
     echo "source ${ASTER_ROOT}/etc/codeaster/profile.sh" >> .bashrc && \
     echo "source ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh" >> .bashrc && \

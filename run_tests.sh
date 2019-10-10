@@ -6,12 +6,13 @@ TEST_DIR=/home/aster/shared/test
 
 mkdir -p $TEST_DIR
 cd $TEST_DIR
-$ASRUN --stdout=out --stderr=err --list --all --output=testcases > screen
+$ASRUN --list --all --output=$TEST_DIR/testcases
+# $ASRUN --list --all --filter='"parallel" in testlist' --output=$TEST_DIR/testcases
 
-for testcase in `cat testcases`
+for testcase in `cat $TEST_DIR/testcases`
 do
     echo "Working on $testcase..."
-    $ASRUN --stdout=out --stderr=err --test $testcase $TEST_DIR > screen
+    $ASRUN --test $testcase $TEST_DIR >> $TEST_DIR/screen
 done
 
-$ASRUN --stderr=err --diag --only_nook --astest_dir=$TEST_DIR > diag
+$ASRUN --diag --only_nook --astest_dir=$TEST_DIR > $TEST_DIR/diag
