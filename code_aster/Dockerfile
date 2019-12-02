@@ -63,13 +63,16 @@ RUN mkdir ptscotch && tar xf ${SCOTCH_SRC} -C ptscotch --strip-components 1 && \
     rm -rf /tmp/${SCOTCH_SRC} /tmp/ptscotch
 
 # Build parmetis
+# Patch from https://bitbucket.org/code_aster/parmetis/src/parmetis_aster/
+COPY --chown=aster:aster code_aster/data/parmetis.patch /tmp/parmetis.patch
 RUN wget --no-check-certificate --quiet ${PARMETIS_SRC} -O parmetis.tar.gz && \
     mkdir parmetis && tar xf parmetis.tar.gz -C parmetis --strip-components 1 && \
+    patch -s -p0 < parmetis.patch && \
     cd parmetis && \
     make config prefix=${PUBLIC}/parmetis-${PARMETIS_VER} && \
     make && \
     make install && \
-    rm -rf /tmp/parmetis.tar.gz /tmp/parmetis
+    rm -rf /tmp/parmetis.tar.gz /tmp/parmetis.patch /tmp/parmetis
 
 # Build scalapack
 RUN wget --no-check-certificate --quiet ${SCALAPACK_SRC} -O scalapack.tar.gz && \
