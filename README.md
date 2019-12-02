@@ -127,11 +127,16 @@ F mess /home/aster/shared/test.mess R 6
 F resu /home/aster/shared/test.resu R 8
 ```
 
-2. In order to use the parallel version, you should have
+2. In order to use the parallel version, these are the related variables in the `export` file
 
 ```
 P version stable_mpi
+P mpi_nbcpu 4 -> number of CPU cores
+P mpi_nbnoeud 1 -> number of nodes
+P ncpus 1 -> number of threads (OpenMP)
 ```
+
+It is recommended to read the [official Code_Aster documentation on parallelism](https://www.code-aster.org/V2/doc/default/en/man_u/u2/u2.08.06.pdf).
 
 #### Running simulation via a direct `as_run` command
 

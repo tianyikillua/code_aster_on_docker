@@ -12,10 +12,10 @@ RUN apt-get update && \
 USER aster
 WORKDIR /home/aster
 RUN wget --no-check-certificate --quiet \
-    https://www.code-aster.org/FICHIERS/salome_meca-2019.0.0-1-LGPL.tgz && \
-    tar xf salome_meca-2019.0.0-1-LGPL.tgz && \
-    ./salome_meca-2019.0.0-1-LGPL.run && \
-    rm salome_meca-2019.0.0-1-LGPL.*
+    https://www.code-aster.org/FICHIERS/salome_meca-2019.0.1-2-LGPL.tgz && \
+    tar xf salome_meca-2019.0.1-2-LGPL.tgz && \
+    ./salome_meca-2019.0.1-2-LGPL.run && \
+    rm salome_meca-2019.0.1-2-LGPL.*
 
 # Add as_run into PATH
 RUN echo "" >> .bashrc && \
