@@ -102,27 +102,29 @@ RUN mkdir mumps && tar xf ${MUMPS_SRC} -C mumps --strip-components 1 && \
     rm -rf /tmp/${MUMPS_SRC} /tmp/mumps
 
 # Build parallel PETSc
-# RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
-#     mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
-#     cd petsc && \
-#     ./configure --COPTFLAGS="-O2" \
-#                 --CXXOPTFLAGS="-O2" \
-#                 --FOPTFLAGS="-O2" \
-#                 --with-64-bit-indices \
-#                 --with-debugging=0 --with-shared-libraries=1 \
-#                 --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
-#                 --with-mumps-dir=${PUBLIC}/mumps-${MUMPS_VER}_mpi \
-#                 --with-metis-dir=${PUBLIC}/metis-${METIS_VER} \
-#                 --with-parmetis-dir=${PUBLIC}/parmetis-${PARMETIS_VER} \
-#                 --with-ptscotch-dir=${PUBLIC}/ptscotch-${SCOTCH_VER} \
-#                 --download-hypre \
-#                 --LIBS="-lgomp" \
-#                 --prefix=${PUBLIC}/petsc-${PETSC_VER} && \
-#     make all && \
-#     make install && \
-#     rm -rf /tmp/petsc.tar.gz /tmp/petsc
-#     ${PUBLIC}/petsc-${PETSC_VER}/include \
-#     ${PUBLIC}/petsc-${PETSC_VER}/lib \
+# Patch from https://hitoricae.com/2019/11/10/code_aster-14-4-with-petsc/
+COPY --chown=aster:aster code_aster/data/petsc.patch /tmp/petsc.patch
+RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
+    mkdir petsc && tar xf petsc.tar.gz -C petsc --strip-components 1 && \
+    patch -s -p0 < petsc.patch && \
+    cd petsc && \
+    ./configure --COPTFLAGS="-O2" \
+                --CXXOPTFLAGS="-O2" \
+                --FOPTFLAGS="-O2" \
+                --with-64-bit-indices \
+                --with-debugging=0 --with-shared-libraries=1 \
+                --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
+                --with-mumps-dir=${PUBLIC}/mumps-${MUMPS_VER}_mpi \
+                --with-metis-dir=${PUBLIC}/metis-${METIS_VER} \
+                --with-parmetis-dir=${PUBLIC}/parmetis-${PARMETIS_VER} \
+                --with-ptscotch-dir=${PUBLIC}/ptscotch-${SCOTCH_VER} \
+                --download-hypre \
+                --download-ml \
+                --LIBS="-lgomp" \
+                --prefix=${PUBLIC}/petsc-${PETSC_VER} && \
+    make all && \
+    make install && \
+    rm -rf /tmp/petsc.tar.gz /tmp/petsc
 
 # Build parallel aster
 COPY --chown=aster:aster code_aster/data/cfg.py /tmp/cfg.py
@@ -136,6 +138,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
                      ${PUBLIC}/ptscotch-${SCOTCH_VER}/include \
                      ${PUBLIC}/mumps-${MUMPS_VER}_mpi/include \
+                     ${PUBLIC}/petsc-${PETSC_VER}/include \
                      ${PUBLIC}/tfel-${MFRONT_VER}/include" && \
     export LIBPATH="${PUBLIC}/hdf5-${HDF5_VER}/lib \
                     ${PUBLIC}/med-${MED_VER}/lib \
@@ -144,6 +147,7 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
                     ${PUBLIC}/ptscotch-${SCOTCH_VER}/lib \
                     ${PUBLIC}/scalapack-${SCALAPACK_VER}/lib \
                     ${PUBLIC}/mumps-${MUMPS_VER}_mpi/lib \
+                    ${PUBLIC}/petsc-${PETSC_VER}/lib \
                     ${PUBLIC}/tfel-${MFRONT_VER}/lib" && \
     export METISDIR=${PUBLIC}/metis-${METIS_VER} && \
     export TFELHOME=${PUBLIC}/tfel-${MFRONT_VER} && \
