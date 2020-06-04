@@ -111,8 +111,8 @@ RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
     ./configure --COPTFLAGS="-O2" \
                 --CXXOPTFLAGS="-O2" \
                 --FOPTFLAGS="-O2" \
-                --with-64-bit-indices \
-                --with-debugging=0 --with-shared-libraries=1 \
+                --with-debugging=0 \
+                --with-shared-libraries=1 \
                 --with-scalapack-dir=${PUBLIC}/scalapack-${SCALAPACK_VER} \
                 --with-mumps-dir=${PUBLIC}/mumps-${MUMPS_VER}_mpi \
                 --with-metis-dir=${PUBLIC}/metis-${METIS_VER} \
