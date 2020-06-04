@@ -37,6 +37,7 @@ RUN apt-get update && \
     libglu1-mesa libxcursor-dev \
     libmpich-dev \
     libopenblas-dev \
+    libsuperlu-dev \
     libboost-python-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
