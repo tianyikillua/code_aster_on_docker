@@ -5,6 +5,7 @@ def configure(self):
     opts.enable_petsc = True
     opts.petsc_libs = "petsc HYPRE ml"
 
+    opts.maths_libs = "openblas superlu"
     opts.enable_homard = True
     opts.with_prog_metis = True
     opts.with_prog_gmsh = True

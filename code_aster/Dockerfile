@@ -133,7 +133,8 @@ RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     . ${ASTER_ROOT}/etc/codeaster/profile.sh && \
     mkdir aster && tar xf ${ASTER_SRC} -C aster --strip-components 1 && \
     cd aster && \
-    export INCLUDES="${PUBLIC}/hdf5-${HDF5_VER}/include \
+    export INCLUDES="/usr/include/superlu \
+                     ${PUBLIC}/hdf5-${HDF5_VER}/include \
                      ${PUBLIC}/med-${MED_VER}/include \
                      ${PUBLIC}/metis-${METIS_VER}/include \
                      ${PUBLIC}/parmetis-${PARMETIS_VER}/include \
