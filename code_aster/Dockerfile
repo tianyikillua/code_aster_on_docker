@@ -129,9 +129,11 @@ RUN wget --no-check-certificate --quiet ${PETSC_SRC} -O petsc.tar.gz && \
 
 # Build parallel aster
 COPY --chown=aster:aster code_aster/data/cfg.py /tmp/cfg.py
+COPY --chown=aster:aster code_aster/data/aster.patch /tmp/aster.patch
 RUN . ${ASTER_ROOT}/${ASTER_VER}/share/aster/profile_mfront.sh && \
     . ${ASTER_ROOT}/etc/codeaster/profile.sh && \
     mkdir aster && tar xf ${ASTER_SRC} -C aster --strip-components 1 && \
+    patch aster/waftools/mathematics.py < aster.patch && \
     cd aster && \
     export INCLUDES="/usr/include/superlu \
                      ${PUBLIC}/hdf5-${HDF5_VER}/include \
